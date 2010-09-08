@@ -1,0 +1,467 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>strategy模式 &mdash; programming v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="author" title="关于这些文档" href="../about.html" />
+    <link rel="top" title="programming v0.1 documentation" href="../index.html" />
+    <link rel="up" title="设计模式学习笔记" href="index.html" />
+    <link rel="next" title="observer模式" href="observer.html" />
+    <link rel="prev" title="设计模式学习笔记" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="observer.html" title="observer模式"
+             accesskey="N">下一页</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="设计模式学习笔记"
+             accesskey="P">上一页</a> |</li>
+        <li><a href="../index.html">programming v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">设计模式学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="strategy">
+<h1>strategy模式<a class="headerlink" href="#strategy" title="永久链接至标题">¶</a></h1>
+<div class="section" id="id1">
+<span id="index-12"></span><span id="id2"></span><h2>strategy模式定义<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p><strong>strategy</strong> 定义了一类的算法,并且封装每一个算法,使得每个算法可以互换. <strong>strategy</strong>
+使得从使用它的用户那里 <strong>独立</strong> 地 <strong>变化</strong>.</p>
+</div>
+<div class="section" id="id3">
+<h2>问题描述<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>在实际的OO设计中可能会面对需求不断变化的情况,而如何能够不改变已有的代码,而去适应新的需求
+这就是设计模式的意义.</p>
+<p>场景描述:</p>
+<p>一个游戏模拟公司的一个鸭子游戏的最初设计如下:</p>
+<img alt="../_images/duck-uml.png" src="../_images/duck-uml.png" />
+<p>此时新的需求来了,要求为鸭子增加 <strong>飞</strong> 和 <strong>叫</strong> 两个功能.</p>
+<p>开始我们可能会想使用继承,直接在父类增加 <cite>void fly()</cite> 和 <cite>void quack()</cite> 两个方法.</p>
+<p>但是经过进一步思考,可能某些鸭子 <strong>不会飞</strong> , 如塑料鸭子, 有的鸭子也不会叫,
+即使都会飞,都会叫,可能叫法和飞法也不同.</p>
+<p>经过我们的深思熟虑,我们决定采用这样的类图:</p>
+<img alt="../_images/strategy.png" src="../_images/strategy.png" />
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p>使用委托( <em>delegate</em> )的方法,让一个类集来完成 <strong>差异化</strong> 部分,此处即为飞翔和叫.</p>
+<p>在这个类集中,我们对于不同的具体的飞翔和叫实现不同的方法,即 <em>fly</em> 和 <em>quack</em> 的具体实现.</p>
+<p class="last">而保持主类 <em>Duck</em> 的 <strong>纯净</strong> (即与差异化的部分无耦合,或者很少), 这样当增加新的需求时
+无需更改主类.</p>
+</div>
+<p>具体的主类 <em>Duck</em> 的类图如下:</p>
+<img alt="../_images/duck-strategy.png" src="../_images/duck-strategy.png" />
+<p>完整的类图如下:</p>
+<img alt="../_images/duck-all.png" src="../_images/duck-all.png" />
+</div>
+<div class="section" id="id4">
+<h2>具体的代码<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>下载请点击 <a href="../_downloads/strategy.cpp"><strong class="xref">这里</strong></a></p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124</pre></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">FlyBehavior</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">fly</span><span class="p">(){}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">QuackBehavior</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">quack</span><span class="p">(){}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">FlyWithWind</span><span class="o">:</span><span class="k">public</span> <span class="n">FlyBehavior</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="n">fly</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;I&#39;m really flying&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">FlyFake</span><span class="o">:</span><span class="k">public</span> <span class="n">FlyBehavior</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="n">fly</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;I can&#39;t fly.&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Quack</span><span class="o">:</span><span class="k">public</span> <span class="n">QuackBehavior</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="n">quack</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;GuaGua, I&#39;m quacking&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">QuackSilence</span><span class="o">:</span><span class="k">public</span> <span class="n">QuackBehavior</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="n">quack</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;I can&#39;t quack at all&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+        
+
+<span class="k">class</span> <span class="nc">Duck</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">QuackBehavior</span><span class="o">*</span> <span class="n">quackBehavior</span><span class="p">;</span>
+        <span class="n">FlyBehavior</span><span class="o">*</span> <span class="n">flyBehavior</span><span class="p">;</span>
+
+        <span class="kt">void</span> <span class="n">performFly</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">flyBehavior</span><span class="o">-&gt;</span><span class="n">fly</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">performQuack</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">quackBehavior</span><span class="o">-&gt;</span><span class="n">quack</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">setFlyBehavior</span><span class="p">(</span><span class="n">FlyBehavior</span> <span class="o">*</span><span class="n">f</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">flyBehavior</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">setQuackBehavior</span><span class="p">(</span><span class="n">QuackBehavior</span> <span class="o">*</span><span class="n">q</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">quackBehavior</span> <span class="o">=</span> <span class="n">q</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">Duck</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c">// 由于变量中有new生成的成员变量,所以需要释放空间</span>
+            <span class="c">// 此处为虚函数,则会在运行时动态绑定</span>
+            <span class="k">delete</span> <span class="n">quackBehavior</span><span class="p">;</span>
+            <span class="k">delete</span> <span class="n">flyBehavior</span><span class="p">;</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;I am destroyed.&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">RealDuck</span><span class="o">:</span><span class="k">public</span> <span class="n">Duck</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">RealDuck</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">quackBehavior</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Quack</span><span class="p">();</span>
+            <span class="n">flyBehavior</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FlyWithWind</span><span class="p">();</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">FakeDuck</span><span class="o">:</span><span class="k">public</span> <span class="n">Duck</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">FakeDuck</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c">// new 生成的实例为指针型</span>
+            <span class="n">quackBehavior</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QuackSilence</span><span class="p">();</span>
+            <span class="n">flyBehavior</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FlyFake</span><span class="p">();</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+        
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Duck</span> <span class="o">*</span><span class="n">duck</span><span class="p">;</span>
+    <span class="n">RealDuck</span> <span class="n">real</span><span class="p">;</span> <span class="c">//真的会叫会飞的鸭子</span>
+    <span class="n">FakeDuck</span> <span class="n">fake</span><span class="p">;</span> <span class="c">//假的不会飞不会叫的鸭子</span>
+
+    <span class="n">duck</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">real</span><span class="p">;</span>   <span class="c">//动态绑定到真鸭子</span>
+    <span class="n">duck</span><span class="o">-&gt;</span><span class="n">performFly</span><span class="p">();</span>
+    <span class="n">duck</span><span class="o">-&gt;</span><span class="n">performQuack</span><span class="p">();</span>
+
+    <span class="n">duck</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">fake</span><span class="p">;</span>   <span class="c">//动态绑定到假鸭子</span>
+    <span class="n">duck</span><span class="o">-&gt;</span><span class="n">performFly</span><span class="p">();</span>
+    <span class="n">duck</span><span class="o">-&gt;</span><span class="n">performQuack</span><span class="p">();</span>
+
+    <span class="n">duck</span><span class="o">-&gt;</span><span class="n">setFlyBehavior</span><span class="p">(</span><span class="k">new</span> <span class="n">FlyWithWind</span><span class="p">());</span>    <span class="c">//运行时更改飞的属性</span>
+    <span class="n">duck</span><span class="o">-&gt;</span><span class="n">performFly</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>输出结果为:</p>
+<div class="highlight-python"><pre>I'm really flying
+GuaGua, I'm quacking
+I can't fly.
+I can't quack at all
+I'm really flying
+I am destroyed.
+I am destroyed.</pre>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>面对新需求<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+<p>如果这时客户又有增加一个 <strong>吃</strong> 的需求时, 我们这时可以这样应对:</p>
+<ul class="simple">
+<li>增加一个 <em>EatBehavior</em> 基类,并定义相应的各种 <strong>吃</strong> 的类集</li>
+<li>在 <em>Duck</em> 类中增加代理成员,类似于 <em>flyBehavior</em> 和 <em>peformEat()</em> 成员方法</li>
+<li>即可</li>
+</ul>
+<p>补充:</p>
+<p>虽然对主类 <em>Duck</em> 增加了相关的成员和成员函数,但是 <strong>增加远比修改要好的多</strong>.</p>
+</div>
+<div class="section" id="id6">
+<h2>更多注意<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id7">
+<h3>设计准则<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h3>
+<ol class="arabic simple">
+<li>Identify the aspects of your application that vary and <em>seperate</em> them from what stays the same</li>
+<li>Program to an interface, not an implementation</li>
+<li><em>Favor composition over inheritance</em></li>
+</ol>
+<p><strong>Program to an interface not to an implementation.</strong></p>
+<p>如何理解这句话?</p>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p><em>Program to an implementation</em> 的代码会像这样:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="n">Dog</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Dog</span><span class="p">();</span>
+<span class="n">d</span><span class="p">.</span><span class="n">bark</span><span class="p">();</span>
+
+<span class="n">Cat</span> <span class="n">c</span>  <span class="o">=</span><span class="k">new</span> <span class="n">Cat</span><span class="p">();</span>
+<span class="n">c</span><span class="p">.</span><span class="n">mio</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>而 <em>Program to interface</em> 的代码会是这样:</p>
+<div class="last highlight-c++"><div class="highlight"><pre><span class="n">Animal</span> <span class="o">*</span><span class="n">a</span><span class="p">;</span>
+<span class="n">Dog</span> <span class="n">d</span><span class="p">;</span>
+<span class="n">Cat</span> <span class="n">c</span><span class="p">;</span>
+<span class="n">a</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">;</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">makeSound</span><span class="p">();</span>
+<span class="n">a</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">;</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">makeSound</span><span class="p">();</span>
+
+<span class="c">// 甚至我们可以这样</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">getAnimal</span><span class="p">();</span>    <span class="c">// 运行时获得特定的动物</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">makeSound</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">內容目录</a></h3>
+            <ul>
+<li><a class="reference external" href="">strategy模式</a><ul>
+<li><a class="reference external" href="#id1">strategy模式定义</a></li>
+<li><a class="reference external" href="#id3">问题描述</a></li>
+<li><a class="reference external" href="#id4">具体的代码</a></li>
+<li><a class="reference external" href="#id5">面对新需求</a></li>
+<li><a class="reference external" href="#id6">更多注意</a><ul>
+<li><a class="reference external" href="#id7">设计准则</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>上一个主题</h4>
+            <p class="topless"><a href="index.html"
+                                  title="上一章">设计模式学习笔记</a></p>
+            <h4>下一个主题</h4>
+            <p class="topless"><a href="observer.html"
+                                  title="下一章">observer模式</a></p>
+            <h3>本页</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/designpattern/strategy.txt"
+                     rel="nofollow">显示源代码</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>快速搜索</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="搜索" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              输入相关的模块，术语，类或者函数名称进行搜索
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="observer.html" title="observer模式"
+             >下一页</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="设计模式学习笔记"
+             >上一页</a> |</li>
+        <li><a href="../index.html">programming v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >设计模式学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; 版权所有 2009, zhutao.iscas@gmail.com.
+      使用 <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

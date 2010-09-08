@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>python学习笔记（朱涛） &mdash; python学习笔记</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="python学习笔记" href="" />
+    <link rel="next" title="python一些重要但不熟悉的语法" href="syntax.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="syntax.html" title="python一些重要但不熟悉的语法"
+             accesskey="N">下一页</a> |</li>
+        <li><a href="">python学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="python">
+<h1>python学习笔记（朱涛）<a class="headerlink" href="#python" title="永久链接至标题">¶</a></h1>
+<p>内容:</p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="syntax.html">python一些重要但不熟悉的语法</a><ul>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id1">到主页的链接</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#index-7">字符串相关</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#index-8">控制流相关</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id5">数据结构</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id6">赋值操作</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id7">类的变量和对象的变量</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id8">异常处理</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id9">类中的特殊语法</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id10">可变长参数函数的使用</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#lambda">lambda语法</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id11">嵌套函数</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#exec-eval">exec和eval</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#assert">assert语句</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#getattr">getattr的分发作用</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id12">类中的私有属性</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#verbose">松散(verbose)的正则表达式</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id13">8进制与16进制</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#names-reference-and-objects">names, reference and objects</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#is">==和is</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#index-10">关于增量赋值</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#generator-object">generator object相关</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#id15">常见的错误</a></li>
+<li class="toctree-l2"><a class="reference external" href="syntax.html#with-as">with as 语句</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="learning-python.html">learning python学习心得</a><ul>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#id1">到主页的链接</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#id3">关于learning python</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#import">关于import</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#python-type-hierarchies">python类型继承关系(type hierarchies)</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#python">python中的函数</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#id8">python中的作用域</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#id9">python中两种类型的类</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#abstract-superclass">abstract superclass 抽象基类</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#callback-function">回调函数Callback function</a></li>
+<li class="toctree-l2"><a class="reference external" href="learning-python.html#index-6">异常处理总结</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="disadvantage.html">python的缺点</a><ul>
+<li class="toctree-l2"><a class="reference external" href="disadvantage.html#id1">python库管理</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="gui.html">python GUI编程学习</a><ul>
+<li class="toctree-l2"><a class="reference external" href="gui.html#gui-hello-world">各种常用GUI库的Hello World 学习</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="tips.html">常用的方法</a><ul>
+<li class="toctree-l2"><a class="reference external" href="tips.html#mixin">mixin</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h1>索引和表格<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<ul class="simple">
+<li><a class="reference external" href="genindex.html"><em>索引</em></a></li>
+<li><a class="reference external" href="search.html"><em>搜索页面</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="">內容目录</a></h3>
+            <ul>
+<li><a class="reference external" href="">python学习笔记（朱涛）</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#id1">索引和表格</a></li>
+</ul>
+
+            <h4>下一个主题</h4>
+            <p class="topless"><a href="syntax.html"
+                                  title="下一章">python一些重要但不熟悉的语法</a></p>
+            <h3>本页</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">显示源代码</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>快速搜索</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="搜索" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              输入相关的模块，术语，类或者函数名称进行搜索
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="syntax.html" title="python一些重要但不熟悉的语法"
+             >下一页</a> |</li>
+        <li><a href="">python学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; 版权所有 2009, zhutao.
+      使用 <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

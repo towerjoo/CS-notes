@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            var flag = false;
+
+            var y = {
+                x : "y's scope"
+            };
+
+            var x = "global scope";
+
+            function ScopeChain()
+            {
+                var x = "ScopeChain's scope";
+                with(y)
+                {
+                    alert(this.x);
+                }
+                alert(this.x);
+            }
+
+            flag = true;
+
+            if (flag)
+            {
+                ScopeChain();
+            }
+
+        </script>
+    </head>
+</html>

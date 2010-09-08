@@ -1,0 +1,811 @@
+.. include:: <s5defs.txt>
+
+============================================
+ About Python Namespaces (and Code Objects)
+============================================
+
+:Author: Jeff Rush <jeff@taupro.com>
+:Copyright: 2009 Tau Productions Inc.
+:License: Creative Commons Attribution-ShareAlike 3.0
+:Date: March 27, 2009
+
+An explanation of some of the underlying concepts of Python, come learn about
+names/values placed in namespaces, modified by code objects and collected into
+modules.  We'll explore namespaces using the Python interactive prompt, with
+graphical display of object trees using Graphviz.  Also explained will be the
+namespace concepts of closures and early binding; how to define new objects
+without subclassing via use of default/curried arguments and closures.
+
+.. container:: handout
+
+   .. image:: /home/caster/themes/talk-pycon/pycon-chicago.png
+      :align: center
+
+.. |bullet| unicode:: U+02022
+.. footer:: Chicago |bullet| PyCon 2009
+
+
+A Few Facts About Namespaces
+============================
+
+.. container:: slide-display
+
+   *"You are in a namespace.  There are names here."*
+
+   .. class:: incremental
+
+      + Namespaces are mappings, often dicts
+      + the foundation of Python; highly optimized
+      + many created/destroyed during execution
+      + there are three well-known ones
+         + `globals,` `locals,` `(builtins)`
+
+      + the set of namespaces around when a function
+
+        .. class:: incremental
+
+           + is *defined* is a **lexical context**
+           + is *called* is a **dynamic context**
+
+      + Python uses lexical contexts for closures
+
+.. container:: handout
+
+   Namespaces can be stacked, such that a search for a name traverses them in
+   a particular order.  There can be globals() and locals(), which can be
+   different or the same namespace.  And there can be other namespaces mixed
+   in there as nested scopes.  Name resolution is inner to outer.
+
+   Python 2.2 added statically-nested scoping (lexical scoping).  Prior to
+   this the language defined exactly three namespaces for name resolution,
+   locals, globals and builtins.
+
+   The addition of nested scopes to Python allows resolution of unbound local
+   names in enclosing functions.
+
+   Use of a name within a code block that (a) is not bound there and (b) is
+   not declared global, is a reference to the nearest enclosing function (but
+   NOT class) region.  Such a name is a free variable.
+
+   A variable can be either a cell variable or a free variable, for a
+   particular code object.  A cell variable is referenced by containing
+   scopes.  A free variable is referenced via a functions's closure.
+
+
+When Name Binding Occurs
+========================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      + Name binding only occurs:
+
+        .. class:: incremental
+
+           + assignment
+           + class and function definition
+           + import statements
+           + argument declaration
+           + for statements
+           + except clauses
+           + implicitly as a result of closures
+
+
+Introducing Code Objects
+========================
+
+.. container:: slide-display
+
+   Code Objects: a natural partner
+
+   .. class:: incremental
+
+      + `namespaces` `+ code objects` `-> cool stuff`
+
+        .. class:: incremental
+
+           + modules
+           + functions
+           + classes
+           + instances
+           + methods
+           + generators
+           + ???
+
+.. container:: handout
+
+   Code objects are the natural partner of namespaces.  Functions, modules and
+   classes are created by combining code objects with namespaces in various
+   ways.
+
+
+Code Objects: What are they?
+============================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      + a low-level concept
+      + a sequence of bytecodes compiled
+      + from a **fragment** of Python source
+
+      ..
+
+      + are NOT namespaces
+      + run INSIDE one or more namespaces
+      + are NOT function objects, lacking context
+
+.. container:: handout
+
+   A code object is a sequence of bytecode instructions compiled from a
+   fragment of Python source.  Code objects are not namespaces (nor functions)
+   but rather they run inside of namespaces.  Code objects are immutable and
+   contain no references (directly or indirectly) to mutable objects.  Code
+   objects are also not functions because code objects lack context such as
+   default argument values (computed at runtime not compile time) and explicit
+   reference to the functions's global namespace.
+
+   Attribute               Purpose
+   =========               =======
+
+   co_name  (object)       name of the function
+   co_argcount (int)       number of positional arguments
+   co_nlocals (int)        number of local variables used, including arguments
+   co_varnames  (object)   tuple of the names of the local variables, starting with the argument names
+   co_cellvars  (object)   tuple of the names of variables referenced by nested functions
+   co_freevars  (object)   tuple of free variables
+   co_code (object)        string representing the actual bytecode instructions
+   co_consts (object)      tuple of literals used by the bytecode instructions, docstring first
+   co_names  (object)      tuple of the names used by the bytecode instructions
+   co_filename  (object)   name of the file from which the code was compiled
+   co_firstlineno  (int)   first line number of the function
+   co_lnotab   (object)    a string encoding the mapping from bytecode offsets to line numbers
+   co_stacksize (int)      the required stacksize, including local variables
+   co_flags (int)          an encoding of various flags for the interpreter
+
+
+Code Objects: Where They Come From
+==================================
+
+.. container:: slide-display
+
+   The Python elements that can compile code are:
+
+   .. class:: incremental
+
+      + the import statement
+      + the compile() function
+      + the exec statement
+      + the execfile() function
+      + the eval() function
+      + the input() function
+
+
+Code Objects: Creating Them
+===========================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      >>> sourcestring = """
+      ... x = 5
+      ... """
+      >>> co = compile(sourcestring, '<stdin>', 'exec')
+
+      >>> from dis import dis
+      >>> dis(co)
+      2           0 LOAD_CONST               0 (5)
+                  3 STORE_NAME               0 (x)
+                  6 LOAD_CONST               1 (None)
+                  9 RETURN_VALUE
+      >>> dir(co)
+      [...] # some interesting attributes to explore
+
+.. container:: handout
+
+   We can take a trivial piece of Python source and compile it into a code
+   object we can examine and dump the resulting bytecode instructions.  Then
+   we can combine it with an empty namespace and examine the results of that
+   execution.
+
+
+Code Objects: Invoking Them
+===========================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      >>> ns = {}  # an empty namespace
+
+      >>> exec co in ns
+
+      >>> ns.keys()
+      ['__builtins__', 'x']
+
+      ..
+
+      Actually:
+
+      >>> exec co in ns, ns  # namespaces: global, local
+
+
+Code Objects: Recognizing Them
+==============================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      A single source file has many code objects!
+
+      |  def func():
+      |      pass        `<---- code object`
+
+      |  class alpha:
+      |      pass        `<---- code object`
+
+      |  class alpha:
+      |      def __init__(self):  `<---- code object #1`
+      |          pass             `<---- code object #2`
+
+      |  if x > 5:
+      |      pass        `<---- NOT a code object`
+
+      |  for x in range(5):
+      |      print x     `<---- NOT a code object`
+
+
+Code Objects: A Network of Objects
+==================================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/simplemodule-src.png
+      .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/simplemodule-diagram.png
+
+.. container:: handout
+
+   Code objects come from the import stage, and there are many code objects at
+   any one time in memory, not just one big one for your overall program.
+
+   The program (dump_namespace.py) to create this SVG diagram from any Python
+   source is available with these slides.  It uses the Graphviz opensource
+   tool for the plotting.
+
+
+Code Objects: A Network of Objects (string.py)
+==============================================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/sample-verybusy.png
+
+.. container:: handout
+
+   (CONSIDER REWORKING, PERHAPS PANNING OVER THE LARGE DIAGRAM)
+
+
+Steps to Instantiating a Module
+===============================
+
+.. container:: slide-display
+
+   .. container:: animation
+
+      .. class:: incremental slide-display
+
+         .. container:: handout
+
+            Let's walk through the steps of creating a module object from
+            source code, at import time.  We won't worry about how the module
+            is located, using *sys.path* but assume we have already found the
+            .py file.
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/src-walkon.gif
+         .. container:: handout
+
+            Here we have the text of a simple module defining a float variable
+            and two functions, the first with a default argument of 5.  When
+            imported for the first time, the Python interpreter compiles it.
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/src-walkleft.gif
+         .. container:: handout
+
+            Running the module through the Python bytecode compiler gives us a
+            tree of code objects, where the root code object represents the
+            steps to initialize the module object and the children are the two
+            functions 'alpha' and 'beta'.  Zooming into that code object tree
+            we can see the raw materials used to construct the namespace of
+            the new module.
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/innercode-zoom.gif
+         .. container:: handout
+
+            We can see in *co_names* the names the module will bind, as well
+            as the values of the right side bound to entries in *co_consts*.
+            Let's peek at the generated bytecode for that module
+            initialization to see how they get put together.
+
+            By the way, this tree of objects is what is serialized, using the
+            *marshal* module onto disk in a .pyc file named after the module.
+
+            The module's code binds the variable 'z' to a float value and
+            instantiates two function objects, binding them to the names
+            'alpha' and 'beta' respectively.
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/execprep.gif
+         .. container:: handout
+
+            Now we execute the root code object node within the empty
+            namespace of a new module object, which is essentially just a
+            dictionary.  That code initializes the module object, similar to
+            an __init__ method.
+
+            We see there are two namespaces, globals and locals, that can be
+            operated upon by the 'exec' operation.  For modules they both
+            point to the empty module object.
+
+            ** >>> exec co in sys.modules['__main__'], sys.modules['__main__']
+            ** DRAW CONNECTING ARROWS TO EXEC COMPONENTS **
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/outercode-zoom.gif
+         .. container:: handout
+
+            Peeking into the formerly empty namespace of the new module, we
+            can see that things have been wired up ready for use.
+
+            The name 'z' is pointing to the float value and there are two
+            function objects bound to the names 'alpha' and 'beta'.  These
+            function objects represent the additional metadata extracted from
+            the 'def' statement.  Looking under the '.func_defaults' member of
+            function alpha, we can see a tuple of default argument values.
+
+            One other thing to notice is the quiet addition of a binding to
+            the special __builtins__ module, which is the third namespace, in
+            addition to globals and locals.
+
+            ** CONSIDER ADDING A LINK BACK FROM THE FUNCTION OBJECT TO THE NAMESPACE
+
+.. container:: handout
+
+   ** REMOVE CAPTION AND CLEANUP NONE HANGING OFF AND LABELING OF MODULE **
+
+   ::
+
+      >>> co = compile(s, '<stdin>', 'exec')
+      >>> from dis import dis
+      >>> dis(co)
+        2           0 LOAD_CONST               0 (2.3)
+                    3 STORE_NAME               0 (z)
+
+        4           6 LOAD_CONST               1 (5)
+                    9 LOAD_CONST               2 (<code object alpha>)
+                   12 MAKE_FUNCTION            1
+                   15 STORE_NAME               1 (alpha)
+
+        7          18 LOAD_CONST               3 (<code object beta>)
+                   21 MAKE_FUNCTION            0
+                   24 STORE_NAME               2 (beta)
+
+                   27 LOAD_CONST               4 (None)
+                   30 RETURN_VALUE
+
+    As a sidenote, there are only four ways for a binding to get into a
+    module's namespace:
+
+      + assignment operator
+      + import
+      + def statement
+      + class statement
+
+   ..
+
+     remove EXEC box, place a red X over the root code object and
+     add a sys.path namespace entry that points to the non-empty namespace.
+     sys.modules['__main__'] = Module(base(filename))
+     change the caption below that namespace to non-empty.
+
+   After execution of the root code object completes, that code object is
+   discarded but the two leaf code objects remain in use, as they are now
+   bound to the names **alpha** and **beta** as we can see in the next
+   diagram.
+
+   The module object with its initialized namespace is then added to the
+   interpreter's list of modules *sys.modules*.  By the way, from this global
+   list which sits at the top of all namespaces, you can get a highlevel view
+   of existing namespaces and traverse downward through nested namespaces.
+
+
+Module Instantiation: A Review
+==============================
+
+.. container:: slide-display
+
+   Modules are (at initial import time)
+
+   .. class:: incremental
+
+      + parsed/compiled into an object tree
+      + (serialized into a .pyc file)
+      + whose root node is executed, producing a
+      + namespace pointing into
+      + a tree of objects
+
+      ..
+
+      + that root node after execution is discarded and
+      + the namespace entered into *sys.modules*
+
+
+Dissecting Module Creation
+==========================
+
+.. container:: slide-display
+
+   .. container:: animation
+
+      .. class:: incremental slide-display
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-src.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-dis.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-pre.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-post.gif
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-src.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-dis.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-pre.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-post.gif
+
+
+Dissecting Function Creation
+============================
+
+.. container:: slide-display
+
+   .. container:: animation
+
+      .. class:: incremental slide-display
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-src.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-dis.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-pre.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-post.gif
+
+
+Dissecting Class/Method Creation
+================================
+
+.. container:: slide-display
+
+   .. container:: animation
+
+      .. class:: incremental slide-display
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-src.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-dis.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-pre.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-post.gif
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-src.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-dis.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-pre.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-post.gif
+
+
+Function/Method Invocation: A Review
+====================================
+
+.. container:: slide-display
+
+   Functions/Methods are
+
+   .. class:: incremental
+
+      + NOT code objects; they HAVE a code object
+      + *locals* namespace does not exist until call
+      + and is constructed from passed/default arguments
+
+      ..
+
+      + after call the locals namespace is discarded
+      + (except for generators)
+
+
+Namespaces: Scope Nesting and Closures
+======================================
+
+.. container:: slide-display
+
+   Closures
+
+   .. class:: incremental
+
+      + added to Python 2.2 as nested scopes
+      + a function that retains refs to vars in its **lexical context**
+      + a kind of macro mechanism for generating customized functions
+      + a way of providing plug-in points in an algorithm
+
+   .. class:: handout
+
+      + sometimes a better alternative to object inheritance
+
+      A closure typically comes about when one function is declared entirely
+      within the body of another, and the inner function refers to local
+      variables of the outer function. At runtime, when the outer function
+      executes, a closure is formed. It consists of the inner function's code
+      and references to any variables in the outer function's scope that the
+      closure needs.
+
+      In programming languages, a term is 'open' if it has free variables
+      (i.e. those that are not bound to a value) or 'closed' if it has no free
+      variables. Thus, the process of binding values to variables is something
+      that makes a term closed, or 'closure'. It's actually got nothing to do
+      with functions, whether anonymous or otherwise; it's simply about
+      binding variables.
+
+      Python is considered by most to support closures ever since we started
+      supporting access to an outer function's locals from within a nested
+      function.
+
+
+A Simple Closure Example
+========================
+
+.. container:: slide-display
+
+   .. container:: animation
+
+      .. class:: incremental slide-display
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-src.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-ns1.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-ns2.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-tunnel.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-define.gif
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-use.gif
+
+.. container:: handout
+
+   ::
+
+        def salary_above(amount): # parameterizing function
+            def wages_test(person):
+                return person.salary > amount
+            return wages_test
+
+        is_paygrade1 = salary_above(20000) # closure #1
+        is_paygrade2 = salary_above(40000) # closure #2
+
+        if is_paygrade1(john): ...
+
+
+Early Binding and Namespaces
+============================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      >>> names = []
+      >>> rollcall = names.append # early binding
+
+      >>> rollcall
+      <built-in method append of list object at 0xb7bd2d8c>
+
+      >>> rollcall('John')
+      >>> rollcall('Mary')
+      >>> names
+      ['John', 'Mary']
+
+      >>> del names
+      >>> rollcall('James')
+
+
+Early Binding and Namespaces (2)
+================================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      >>> isurl = re.compile('([a-zA-Z0-9+.-]+)://').match
+
+      >>> if isurl("http://www.python"): ...
+
+      >>> is_allowed = {
+      ...     'HTTP_AUTHORIZATION': 1,
+      ...     'HTTP_CGI_AUTHORIZATION': 1,
+      ...     }.has_key
+
+      >>> is_allowed
+      <built-in method has_key of dict object at 0xb7c404f4>
+
+      >>> if is_allowed('HTTP_AUTHORIZATION'): ...
+
+
+Early Binding and Namespaces (3)
+================================
+
+.. container:: slide-display
+
+   ..
+
+   .. class:: incremental
+
+      >>> ez = {}
+      >>>  exec urllib2.urlopen('http://peak.telecommunity.com/dist/ez_setup.py'
+      ...                        ).read() in ez
+
+
+Delegation via Early Binding
+============================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      ::
+
+        class Alpha:
+            def __init__(self):
+                self.storage = ...
+            def load(self, oid): # passthrus
+                return self.storage.load(oid)
+            def history(self):
+                return self.storage.history()
+
+      ::
+
+        class Alpha: # from ZEO
+            def __init__(self):
+                self.storage = ...
+                self.load = self.storage.load
+                self.history = self.storage.history
+
+
+Delegation via Namespace Introspection
+======================================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      ::
+
+        import sys
+
+        def main():
+            print "default cmd"
+
+        def debug():
+            print "debug cmd"
+
+        def profile():
+            print "profile cmd"
+
+        if __name__ == "__main__":
+            if len(sys.argv) > 1:
+                globals()[ sys.argv[1] ]()
+            else:
+                main()
+
+
+Curious Case of Methods and Functions
+=====================================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      >>> class Beta:
+      ...     def meth(self):
+      ...         pass
+      ...
+      >>> Beta.meth is Beta.meth
+      False
+
+
+Curious Case of Methods and Functions (cont'd)
+==============================================
+
+.. container:: slide-display
+
+   .. container:: animation
+
+      .. class:: incremental slide-display
+
+         .. image:: /home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/curiousmeth.gif
+
+
+Global Statement Is Not Declaratory
+===================================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      >>> def abc():
+      ...     global xyz
+      ...     def xyz(a):
+      ...         print a
+      ...     return None
+      >>> xyz
+
+      | Traceback (most recent call last):
+      |   File "<stdin>", line 1, in <module>
+      | NameError: name 'xyz' is not defined
+
+      >>> abc()
+      >>> xyz
+      <function xyz at 0xb7c7e17c>
+
+.. container:: handout
+
+   A "global" modifier is not required to read a global variable, only if you
+   need to modify one.  This is a safety feature to prevent accidental
+   modification of global variables.
+
+
+Practical Use of Global Statement
+=================================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      ::
+
+        def StringIO(*args, **kw):
+            """Thunk to load the real StringIO on demand"""
+            global StringIO
+            try:
+                from cStringIO import StringIO
+            except ImportError:
+                from StringIO import StringIO
+            return StringIO(*args,**kw)
+        # StringIO points to the thunk
+
+      ::
+
+        x = StringIO("This is some data")
+        # Now StringIO points to the actual function
+
+
+Namespaces and the Zen of Python
+================================
+
+.. container:: slide-display
+
+   .. class:: incremental
+
+      + PEP 227 -- Statically Nested Scopes
+      + Section: Data Model, Subsection: Code objects in Python Ref Manual
+
+   .. class:: incremental
+
+      >>> import this
+      The Zen of Python, by Tim Peters
+      ...
+      Namespaces are one honking great idea -- let's do more of those!
+
+    >>> globals() is locals()
+    True?
+
+   .. class:: huge
+
+      `Questions?`
+
+
+..
+   XXLocal Variables:
+   mode: rst
+   mode: outline-minor
+   End:

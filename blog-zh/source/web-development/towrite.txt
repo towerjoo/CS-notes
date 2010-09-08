@@ -1,0 +1,5 @@
+
+to read:
+
+1. fastcgi vs. module(apache)
+2. web开发的基本问题(请求是如何处理的)

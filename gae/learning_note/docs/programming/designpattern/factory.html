@@ -1,0 +1,669 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>factory method模式 &mdash; programming v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="author" title="关于这些文档" href="../about.html" />
+    <link rel="top" title="programming v0.1 documentation" href="../index.html" />
+    <link rel="up" title="设计模式学习笔记" href="index.html" />
+    <link rel="next" title="abstract factory模式" href="abstract_factory.html" />
+    <link rel="prev" title="decorator模式" href="decorator.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="abstract_factory.html" title="abstract factory模式"
+             accesskey="N">下一页</a> |</li>
+        <li class="right" >
+          <a href="decorator.html" title="decorator模式"
+             accesskey="P">上一页</a> |</li>
+        <li><a href="../index.html">programming v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">设计模式学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="factory-method">
+<span id="id1"></span><h1>factory method模式<a class="headerlink" href="#factory-method" title="永久链接至标题">¶</a></h1>
+<div class="section" id="factory">
+<span id="index-6"></span><span id="id2"></span><h2>factory method模式定义<a class="headerlink" href="#factory" title="永久链接至标题">¶</a></h2>
+<p><strong>Factory Method</strong> define an interface for creating an object, but
+let subclasses decide which class to instantiate. <strong>Factory Method</strong>
+lets a class defer instantiation to the subclasses.</p>
+<p><strong>工厂方法</strong> 定义了用来创建对象的接口，但是让子类来决定实例化哪个类。
+<strong>工厂方法</strong> 使得一个类将实例化的过程转移到子类。</p>
+</div>
+<div class="section" id="id3">
+<h2>问题描述<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>一个工厂生产种类的pizza，并且在不同的地点有分厂，于是具有如下的需求：</p>
+<ul class="simple">
+<li>根据不同的pizza和地点会有不同的类型的pizza</li>
+<li>可能会增加新的地点和种类的pizza</li>
+</ul>
+<p>具体可见图：</p>
+<img alt="../_images/dependency.png" src="../_images/dependency.png" />
+<p>基本的 <strong>工厂方法</strong> 如下：</p>
+<img alt="../_images/factory_method_class.png" src="../_images/factory_method_class.png" />
+<p>使用工厂方法的如下：</p>
+<img alt="../_images/factory_method.png" src="../_images/factory_method.png" />
+<p>具体的类图如下：</p>
+<img alt="../_images/factory_class.png" src="../_images/factory_class.png" />
+</div>
+<div class="section" id="id4">
+<h2>具体代码<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>下载请点击 <a href="../_downloads/factory.cpp"><strong class="xref">这里</strong></a></p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231</pre></td><td class="code"><div class="highlight"><pre><span class="cp">#include&lt;iostream&gt;</span>
+<span class="cp">#include&lt;string&gt;</span>
+<span class="cp">#include&lt;vector&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Pizza</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NYStyleCheesPizza</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NYStyleVeggiePizza</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NYStyleClamPizza</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NYStylePepperoniPizza</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">ChicagoStyleCheesPizza</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">ChicagoStyleVeggiePizza</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">ChicagoStyleClamPizza</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">ChicagoStylePepperoniPizza</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">PizzaStore</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NYPizzaStore</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">ChicagoPizzaStore</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">dough</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">sauce</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">toppings</span><span class="p">;</span>
+
+        <span class="kt">void</span> <span class="n">prepare</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Preparing &quot;</span><span class="o">&lt;&lt;</span><span class="n">name</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Tossing dough...&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Adding sauce...&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Adding toppings:&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">toppings</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;    &quot;</span><span class="o">&lt;&lt;</span><span class="n">toppings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">bake</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Bake for 25 minutes at 350&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">cut</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Cutting the pizza into diagonal slices&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">box</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Place the pizza in official PizzaStore box&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">string</span> <span class="n">getName</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">name</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">PizzaStore</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">Pizza</span><span class="o">*</span> <span class="n">orderPizza</span><span class="p">(</span><span class="n">string</span> <span class="n">type</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Pizza</span> <span class="o">*</span><span class="n">pizza</span><span class="p">;</span>
+            <span class="n">pizza</span> <span class="o">=</span> <span class="n">createPizza</span><span class="p">(</span><span class="n">type</span><span class="p">);</span>
+            <span class="n">pizza</span><span class="o">-&gt;</span><span class="n">prepare</span><span class="p">();</span>
+            <span class="n">pizza</span><span class="o">-&gt;</span><span class="n">bake</span><span class="p">();</span>
+            <span class="n">pizza</span><span class="o">-&gt;</span><span class="n">cut</span><span class="p">();</span>
+            <span class="n">pizza</span><span class="o">-&gt;</span><span class="n">box</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">pizza</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">virtual</span> <span class="n">Pizza</span><span class="o">*</span> <span class="n">createPizza</span><span class="p">(</span><span class="n">string</span> <span class="n">type</span><span class="p">){}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">NYStyleCheesPizza</span><span class="o">:</span><span class="k">public</span> <span class="n">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">NYStyleCheesPizza</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;NY Style Sauce and Cheese Pizza&quot;</span><span class="p">;</span>
+            <span class="n">dough</span> <span class="o">=</span> <span class="s">&quot;Thin Crust Dough&quot;</span><span class="p">;</span>
+            <span class="n">sauce</span> <span class="o">=</span> <span class="s">&quot;Marinara Sauce&quot;</span><span class="p">;</span>
+
+            <span class="n">toppings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Grated Reggiano Cheese&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">NYStylePepperoniPizza</span><span class="o">:</span><span class="k">public</span> <span class="n">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">NYStylePepperoniPizza</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;NY Style Sauce and Pepperoni Pizza&quot;</span><span class="p">;</span>
+            <span class="n">dough</span> <span class="o">=</span> <span class="s">&quot;Thin Crust Dough&quot;</span><span class="p">;</span>
+            <span class="n">sauce</span> <span class="o">=</span> <span class="s">&quot;Marinara Sauce&quot;</span><span class="p">;</span>
+
+            <span class="n">toppings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Grated Reggiano Pepperoni&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">NYStyleClamPizza</span><span class="o">:</span><span class="k">public</span> <span class="n">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">NYStyleClamPizza</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;NY Style Sauce and Clam Pizza&quot;</span><span class="p">;</span>
+            <span class="n">dough</span> <span class="o">=</span> <span class="s">&quot;Thin Crust Dough&quot;</span><span class="p">;</span>
+            <span class="n">sauce</span> <span class="o">=</span> <span class="s">&quot;Marinara Sauce&quot;</span><span class="p">;</span>
+
+            <span class="n">toppings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Grated Reggiano Clam&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">NYStyleVeggiePizza</span><span class="o">:</span><span class="k">public</span> <span class="n">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">NYStyleVeggiePizza</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;NY Style Sauce and Veggie Pizza&quot;</span><span class="p">;</span>
+            <span class="n">dough</span> <span class="o">=</span> <span class="s">&quot;Thin Crust Dough&quot;</span><span class="p">;</span>
+            <span class="n">sauce</span> <span class="o">=</span> <span class="s">&quot;Marinara Sauce&quot;</span><span class="p">;</span>
+
+            <span class="n">toppings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Grated Reggiano Veggie&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">ChicagoStyleCheesPizza</span><span class="o">:</span><span class="k">public</span> <span class="n">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">ChicagoStyleCheesPizza</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Chicago Style Sauce and Cheese Pizza&quot;</span><span class="p">;</span>
+            <span class="n">dough</span> <span class="o">=</span> <span class="s">&quot;Thin Crust Dough&quot;</span><span class="p">;</span>
+            <span class="n">sauce</span> <span class="o">=</span> <span class="s">&quot;Marinara Sauce&quot;</span><span class="p">;</span>
+
+            <span class="n">toppings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Grated Reggiano Cheese&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">ChicagoStylePepperoniPizza</span><span class="o">:</span><span class="k">public</span> <span class="n">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">ChicagoStylePepperoniPizza</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Chicago Style Sauce and Pepperoni Pizza&quot;</span><span class="p">;</span>
+            <span class="n">dough</span> <span class="o">=</span> <span class="s">&quot;Thin Crust Dough&quot;</span><span class="p">;</span>
+            <span class="n">sauce</span> <span class="o">=</span> <span class="s">&quot;Marinara Sauce&quot;</span><span class="p">;</span>
+
+            <span class="n">toppings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Grated Reggiano Pepperoni&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">ChicagoStyleClamPizza</span><span class="o">:</span><span class="k">public</span> <span class="n">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">ChicagoStyleClamPizza</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Chicago Style Sauce and Clam Pizza&quot;</span><span class="p">;</span>
+            <span class="n">dough</span> <span class="o">=</span> <span class="s">&quot;Thin Crust Dough&quot;</span><span class="p">;</span>
+            <span class="n">sauce</span> <span class="o">=</span> <span class="s">&quot;Marinara Sauce&quot;</span><span class="p">;</span>
+
+            <span class="n">toppings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Grated Reggiano Clam&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">ChicagoStyleVeggiePizza</span><span class="o">:</span><span class="k">public</span> <span class="n">Pizza</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">ChicagoStyleVeggiePizza</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Chicago Style Sauce and Veggie Pizza&quot;</span><span class="p">;</span>
+            <span class="n">dough</span> <span class="o">=</span> <span class="s">&quot;Thin Crust Dough&quot;</span><span class="p">;</span>
+            <span class="n">sauce</span> <span class="o">=</span> <span class="s">&quot;Marinara Sauce&quot;</span><span class="p">;</span>
+
+            <span class="n">toppings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Grated Reggiano Veggie&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+
+
+
+<span class="k">class</span> <span class="nc">NYPizzaStore</span><span class="o">:</span><span class="k">public</span> <span class="n">PizzaStore</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">Pizza</span><span class="o">*</span> <span class="n">createPizza</span><span class="p">(</span><span class="n">string</span> <span class="n">type</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;cheese&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">NYStyleCheesPizza</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span><span class="o">==</span><span class="s">&quot;veggie&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">NYStyleVeggiePizza</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;clam&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">NYStyleClamPizza</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;pepperoni&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">NYStylePepperoniPizza</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">ChicagoPizzaStore</span><span class="o">:</span><span class="k">public</span> <span class="n">PizzaStore</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">Pizza</span><span class="o">*</span> <span class="n">createPizza</span><span class="p">(</span><span class="n">string</span> <span class="n">type</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;cheese&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">ChicagoStyleCheesPizza</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span><span class="o">==</span><span class="s">&quot;veggie&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">ChicagoStyleVeggiePizza</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;clam&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">ChicagoStyleClamPizza</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;pepperoni&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="n">ChicagoStylePepperoniPizza</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">};</span>
+
+
+
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">PizzaStore</span> <span class="o">*</span><span class="n">nyStore</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NYPizzaStore</span><span class="p">();</span>
+    <span class="n">PizzaStore</span> <span class="o">*</span><span class="n">chicagoStore</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ChicagoPizzaStore</span><span class="p">();</span>
+
+    <span class="n">Pizza</span> <span class="o">*</span><span class="n">pizza</span> <span class="o">=</span> <span class="n">nyStore</span><span class="o">-&gt;</span><span class="n">orderPizza</span><span class="p">(</span><span class="s">&quot;cheese&quot;</span><span class="p">);</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Ethan ordered a &quot;</span><span class="o">&lt;&lt;</span><span class="n">pizza</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">pizza</span> <span class="o">=</span> <span class="n">chicagoStore</span><span class="o">-&gt;</span><span class="n">orderPizza</span><span class="p">(</span><span class="s">&quot;clam&quot;</span><span class="p">);</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Joel ordered a &quot;</span><span class="o">&lt;&lt;</span><span class="n">pizza</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>输出结果为:</p>
+<div class="highlight-python"><pre>Preparing NY Style Sauce and Cheese Pizza
+Tossing dough...
+Adding sauce...
+Adding toppings:
+    Grated Reggiano Cheese
+Bake for 25 minutes at 350
+Cutting the pizza into diagonal slices
+Place the pizza in official PizzaStore box
+Ethan ordered a NY Style Sauce and Cheese Pizza
+
+Preparing Chicago Style Sauce and Clam Pizza
+Tossing dough...
+Adding sauce...
+Adding toppings:
+    Grated Reggiano Clam
+Bake for 25 minutes at 350
+Cutting the pizza into diagonal slices
+Place the pizza in official PizzaStore box
+Joel ordered a Chicago Style Sauce and Clam Pizza</pre>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>面对新的需要<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+<p>需要增加新地点时，如california，可以按照如下进行：</p>
+<ul class="simple">
+<li>继承 <em>Pizza</em> 类生成特定于california的Pizza类</li>
+<li>继承 <em>PizzaStore</em> 类生成特定于california的工厂类</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>更多注意<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<p>需要注意的是：</p>
+<ul class="simple">
+<li><em>Factory Method</em> 是基于类继承的，继承于一个抽象的工厂基类（注意与 <a class="reference external" href="abstract_factory.html#abstract-factory"><em>abstract factory模式</em></a> 的区别）</li>
+<li><em>Factory Method</em> 模式将实例化的工作将给子类</li>
+</ul>
+<p>设计原则：</p>
+<p><strong>Depend on abstraction. Do not depend on concrete class.</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p>关于 <strong>Dependency Inversion Principle</strong>, 使用下面的思路来减少依赖（实际的代码不可能完全遵守，但尽量遵守，除非有更好的理由):</p>
+<ul class="last simple">
+<li>No variable should hold a reference to a concrete class.</li>
+<li>No class should derive from a concrete class.</li>
+<li>No method should override an implemented method of any of its base classes.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>参考更多<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Factory_method_pattern">Factory_Method_Pattern</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">內容目录</a></h3>
+            <ul>
+<li><a class="reference external" href="">factory method模式</a><ul>
+<li><a class="reference external" href="#factory">factory method模式定义</a></li>
+<li><a class="reference external" href="#id3">问题描述</a></li>
+<li><a class="reference external" href="#id4">具体代码</a></li>
+<li><a class="reference external" href="#id5">面对新的需要</a></li>
+<li><a class="reference external" href="#id6">更多注意</a></li>
+<li><a class="reference external" href="#id7">参考更多</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>上一个主题</h4>
+            <p class="topless"><a href="decorator.html"
+                                  title="上一章">decorator模式</a></p>
+            <h4>下一个主题</h4>
+            <p class="topless"><a href="abstract_factory.html"
+                                  title="下一章">abstract factory模式</a></p>
+            <h3>本页</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/designpattern/factory.txt"
+                     rel="nofollow">显示源代码</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>快速搜索</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="搜索" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              输入相关的模块，术语，类或者函数名称进行搜索
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="abstract_factory.html" title="abstract factory模式"
+             >下一页</a> |</li>
+        <li class="right" >
+          <a href="decorator.html" title="decorator模式"
+             >上一页</a> |</li>
+        <li><a href="../index.html">programming v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >设计模式学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; 版权所有 2009, zhutao.iscas@gmail.com.
+      使用 <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

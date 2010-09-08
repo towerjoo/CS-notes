@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>常用的方法 &mdash; python学习笔记</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="python学习笔记" href="index.html" />
+    <link rel="prev" title="python GUI编程学习" href="gui.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="gui.html" title="python GUI编程学习"
+             accesskey="P">上一页</a> |</li>
+        <li><a href="index.html">python学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>常用的方法<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<div class="section" id="mixin">
+<span id="index-13"></span><h2>mixin<a class="headerlink" href="#mixin" title="永久链接至标题">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p><a class="reference external" href="http://en.wikipedia.org/wiki/Mixin">mixin</a> 是一种常用的OO编程方法
+支持 <em>mixin</em> 的语言通常需要满足:</p>
+<ol class="last arabic simple">
+<li>多重继承</li>
+<li>动态绑定</li>
+<li>运行时更改类</li>
+</ol>
+</div>
+<p>例如有如下的代码:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></td><td class="code"><div class="highlight"><pre><span class="c"># coding:utf-8</span>
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">p</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">print</span> <span class="n">value</span>
+
+<span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="p">()</span>
+    <span class="c">#a.p()   # will get error</span>
+    <span class="n">C</span><span class="o">.</span><span class="n">__bases__</span> <span class="o">+=</span> <span class="p">(</span><span class="n">B</span><span class="p">,)</span> <span class="c"># dynamically change the inheriting tree</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">p</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>更多参考:</p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference external" href="http://www.linuxjournal.com/article/4540">Using Mix-ins with Python</a></li>
+<li><a class="reference external" href="http://blog.csdn.net/lanphaday/archive/2007/06/18/1656969.aspx">Mixin 扫盲班</a></li>
+</ul>
+</blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">內容目录</a></h3>
+            <ul>
+<li><a class="reference external" href="">常用的方法</a><ul>
+<li><a class="reference external" href="#mixin">mixin</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>上一个主题</h4>
+            <p class="topless"><a href="gui.html"
+                                  title="上一章">python GUI编程学习</a></p>
+            <h3>本页</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/tips.txt"
+                     rel="nofollow">显示源代码</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>快速搜索</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="搜索" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              输入相关的模块，术语，类或者函数名称进行搜索
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="gui.html" title="python GUI编程学习"
+             >上一页</a> |</li>
+        <li><a href="index.html">python学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; 版权所有 2009, zhutao.
+      使用 <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

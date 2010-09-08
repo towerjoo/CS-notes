@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>python GUI编程学习 &mdash; python学习笔记</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="python学习笔记" href="index.html" />
+    <link rel="next" title="常用的方法" href="tips.html" />
+    <link rel="prev" title="python的缺点" href="disadvantage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="tips.html" title="常用的方法"
+             accesskey="N">下一页</a> |</li>
+        <li class="right" >
+          <a href="disadvantage.html" title="python的缺点"
+             accesskey="P">上一页</a> |</li>
+        <li><a href="index.html">python学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="python-gui">
+<h1>python GUI编程学习<a class="headerlink" href="#python-gui" title="永久链接至标题">¶</a></h1>
+<div class="section" id="gui-hello-world">
+<h2>各种常用GUI库的Hello World 学习<a class="headerlink" href="#gui-hello-world" title="永久链接至标题">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p class="last">常用的python GUI库包括：Tkinter, wxPython, PyGTK, PyQT4等，下文会就各种库完成一个hellworld例程，最后会进行一个对比，并给出自己的选择。</p>
+</div>
+<div class="section" id="tkinter">
+<h3>Tkinter<a class="headerlink" href="#tkinter" title="永久链接至标题">¶</a></h3>
+<p><a class="reference external" href="http://www.pythonware.com/library/tkinter/introduction/whats-tkinter.htm">Tkinter</a> 是基于TK GUI Toolkit的一个python库，它是python <em>标准</em> 的GUI库。</p>
+<p>HelloWorld例程( 下载 <a href="_downloads/tkinter.py"><strong class="xref">源码</strong></a> )</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Tkinter</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">class</span> <span class="nc">App</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">):</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="n">master</span><span class="p">)</span>
+        <span class="n">frame</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">&quot;退出&quot;</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="n">frame</span><span class="o">.</span><span class="n">quit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">LEFT</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hi_there</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">&quot;Hello&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">say_hi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hi_there</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">LEFT</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">say_hi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;hi there, everyone!&quot;</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">Tk</span><span class="p">()</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+
+<span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>我的评价：</p>
+<blockquote>
+<ol class="arabic">
+<li><p class="first">优点</p>
+<blockquote>
+<ul class="simple">
+<li>所谓的python <em>standard</em> gui library</li>
+<li>开发还是比较简单的</li>
+<li>Idle就是使用tkinter开发的</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">缺点</p>
+<blockquote>
+<ul class="simple">
+<li>默认界面比较丑</li>
+<li>TK的发展并不好</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="wxpython">
+<h3>wxpython<a class="headerlink" href="#wxpython" title="永久链接至标题">¶</a></h3>
+<p><a class="reference external" href="http://www.wxpython.org/">wxPython</a> 是基于wxWidgets C++ class library的python GUI库。</p>
+<p>一个helloworld的例程：( 下载 <a href="_downloads/wxpython.py"><strong class="xref">源码</strong></a> )</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="n">ID_ABOUT</span><span class="o">=</span><span class="mf">101</span>
+<span class="n">ID_EXIT</span><span class="o">=</span><span class="mf">110</span>
+<span class="k">class</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parent</span><span class="p">,</span><span class="nb">id</span><span class="p">,</span><span class="n">title</span><span class="p">):</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parent</span><span class="p">,</span><span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mf">200</span><span class="p">,</span><span class="mf">100</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mf">1</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">TE_MULTILINE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CreateStatusBar</span><span class="p">()</span> <span class="c"># A StatusBar in the bottom of the window</span>
+        <span class="c"># Setting up the menu.</span>
+        <span class="n">filemenu</span><span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Menu</span><span class="p">()</span>
+        <span class="n">filemenu</span><span class="o">.</span><span class="n">Append</span><span class="p">(</span><span class="n">ID_ABOUT</span><span class="p">,</span> <span class="s">&quot;&amp;About&quot;</span><span class="p">,</span><span class="s">&quot; Information about this program&quot;</span><span class="p">)</span>
+        <span class="n">filemenu</span><span class="o">.</span><span class="n">AppendSeparator</span><span class="p">()</span>
+        <span class="n">filemenu</span><span class="o">.</span><span class="n">Append</span><span class="p">(</span><span class="n">ID_EXIT</span><span class="p">,</span><span class="s">&quot;E&amp;xit&quot;</span><span class="p">,</span><span class="s">&quot; Terminate the program&quot;</span><span class="p">)</span>
+        <span class="c"># Creating the menubar.</span>
+        <span class="n">menuBar</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">MenuBar</span><span class="p">()</span>
+        <span class="n">menuBar</span><span class="o">.</span><span class="n">Append</span><span class="p">(</span><span class="n">filemenu</span><span class="p">,</span><span class="s">&quot;&amp;File&quot;</span><span class="p">)</span> <span class="c"># Adding the &quot;filemenu&quot; to the MenuBar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetMenuBar</span><span class="p">(</span><span class="n">menuBar</span><span class="p">)</span>  <span class="c"># Adding the MenuBar to the Frame content.</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">EVT_MENU</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ID_ABOUT</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnAbout</span><span class="p">)</span> <span class="c"># attach the menu-event ID_ABOUT to the</span>
+        <span class="c"># method self.OnAbout</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">EVT_MENU</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ID_EXIT</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnExit</span><span class="p">)</span>   <span class="c"># attach the menu-event ID_EXIT to the</span>
+        <span class="c"># method self.OnExit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Show</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">OnAbout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">e</span><span class="p">):</span>
+        <span class="n">d</span><span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="s">&quot; A sample editor </span><span class="se">\n</span><span class="s">&quot;</span>
+                <span class="s">&quot; in wxPython&quot;</span><span class="p">,</span><span class="s">&quot;About Sample Editor&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">OK</span><span class="p">)</span>
+        <span class="c"># Create a message dialog box</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span> <span class="c"># Shows it</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span> <span class="c"># finally destroy it when finished.</span>
+
+    <span class="k">def</span> <span class="nf">OnExit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">e</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Close</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>  <span class="c"># Close the frame.</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">PySimpleApp</span><span class="p">()</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="o">-</span><span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Sample editor&quot;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>评价：</p>
+<blockquote>
+<ol class="arabic">
+<li><p class="first">优点</p>
+<blockquote>
+<ul class="simple">
+<li>有更多的feauture</li>
+<li>响应速度（指启动后）</li>
+<li>本地化的界面</li>
+<li>有成熟的作品(如ulipad等）</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">缺点</p>
+<blockquote>
+<ul class="simple">
+<li>启动速度比较慢（wxPython的库比较大，相比于TK)</li>
+<li>相比于TK可能不是太stable</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="pygtk">
+<h3>pygtk<a class="headerlink" href="#pygtk" title="永久链接至标题">¶</a></h3>
+<p><a class="reference external" href="http://www.pygtk.org/">pygtk</a> 是一个基于GTK+库的Python GUI库。</p>
+<p>helloworld例程：( 下载 <a href="_downloads/pygtk-test.py"><strong class="xref">源码</strong></a> )</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pygtk</span>
+<span class="n">pygtk</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s">&#39;2.0&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">gtk</span>
+
+<span class="k">class</span> <span class="nc">HelloWorld2</span><span class="p">:</span>
+
+    <span class="c"># Our new improved callback.  The data passed to this method</span>
+    <span class="c"># is printed to stdout.</span>
+    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Hello again - </span><span class="si">%s</span><span class="s"> was pressed&quot;</span> <span class="o">%</span> <span class="n">data</span>
+
+    <span class="c"># another callback</span>
+    <span class="k">def</span> <span class="nf">delete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">gtk</span><span class="o">.</span><span class="n">main_quit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Create a new window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">Window</span><span class="p">(</span><span class="n">gtk</span><span class="o">.</span><span class="n">WINDOW_TOPLEVEL</span><span class="p">)</span>
+
+        <span class="c"># This is a new call, which just sets the title of our</span>
+        <span class="c"># new window to &quot;Hello Buttons!&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&quot;Hello Buttons!&quot;</span><span class="p">)</span>
+
+        <span class="c"># Here we just set a handler for delete_event that immediately</span>
+        <span class="c"># exits GTK.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;delete_event&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete_event</span><span class="p">)</span>
+
+        <span class="c"># Sets the border width of the window.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">set_border_width</span><span class="p">(</span><span class="mf">10</span><span class="p">)</span>
+
+        <span class="c"># We create a box to pack widgets into.  This is described in detail</span>
+        <span class="c"># in the &quot;packing&quot; section. The box is not really visible, it</span>
+        <span class="c"># is just used as a tool to arrange widgets.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box1</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">HBox</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="mf">0</span><span class="p">)</span>
+
+        <span class="c"># Put the box into the main window.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box1</span><span class="p">)</span>
+
+        <span class="c"># Creates a new button with the label &quot;Button 1&quot;.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button1</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Button 1&quot;</span><span class="p">)</span>
+
+        <span class="c"># Now when the button is clicked, we call the &quot;callback&quot; method</span>
+        <span class="c"># with a pointer to &quot;button 1&quot; as its argument</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button1</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;clicked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">,</span> <span class="s">&quot;button 1&quot;</span><span class="p">)</span>
+
+        <span class="c"># Instead of add(), we pack this button into the invisible</span>
+        <span class="c"># box, which has been packed into the window.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box1</span><span class="o">.</span><span class="n">pack_start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button1</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="mf">0</span><span class="p">)</span>
+
+        <span class="c"># Always remember this step, this tells GTK that our preparation for</span>
+        <span class="c"># this button is complete, and it can now be displayed.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button1</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="c"># Do these same steps again to create a second button</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button2</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Button 2&quot;</span><span class="p">)</span>
+
+        <span class="c"># Call the same callback method with a different argument,</span>
+        <span class="c"># passing a pointer to &quot;button 2&quot; instead.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;clicked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">,</span> <span class="s">&quot;button 2&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">box1</span><span class="o">.</span><span class="n">pack_start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button2</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="mf">0</span><span class="p">)</span>
+
+        <span class="c"># The order in which we show the buttons is not really important, but I</span>
+        <span class="c"># recommend showing the window last, so it all pops up at once.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button2</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box1</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">gtk</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">hello</span> <span class="o">=</span> <span class="n">HelloWorld2</span><span class="p">()</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pyqt4">
+<h3>pyqt4<a class="headerlink" href="#pyqt4" title="永久链接至标题">¶</a></h3>
+<p><a class="reference external" href="http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/pyqt4ref.html">pyqt4</a> 是一个基于 QT4 的Python GUI库。</p>
+<p>Hello world例程：( 下载 <a href="_downloads/pyqt4.py"><strong class="xref">源码</strong></a> )</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+
+<span class="n">widget</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+<span class="n">widget</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mf">250</span><span class="p">,</span> <span class="mf">250</span><span class="p">)</span>
+<span class="n">widget</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">)</span>
+<span class="n">widget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>比较<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<blockquote>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://wiki.wxpython.org/Choosing%20wxPython%20over%20Tkinter">tkinter vs. wxpython</a></li>
+<li><a class="reference external" href="http://lists.wxwidgets.org/pipermail/wxpython-users/2000-February/000399.html">Rossum&#8217;s comment about tkinter and wxpython</a></li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="id6">
+<h3>结论<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h3>
+<p>单就我的个人使用而言，我觉得wxPython足以满足我的需要，因为：</p>
+<blockquote>
+<ol class="arabic simple">
+<li>有本地的界面支持（这点做的比较好，UI比较好看）</li>
+<li>开源的协议</li>
+<li>功能比较强大</li>
+<li>响应速度快（启动可能比较慢）</li>
+<li>已经有成功的作品（如ulipad)</li>
+</ol>
+</blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">內容目录</a></h3>
+            <ul>
+<li><a class="reference external" href="">python GUI编程学习</a><ul>
+<li><a class="reference external" href="#gui-hello-world">各种常用GUI库的Hello World 学习</a><ul>
+<li><a class="reference external" href="#tkinter">Tkinter</a></li>
+<li><a class="reference external" href="#wxpython">wxpython</a></li>
+<li><a class="reference external" href="#pygtk">pygtk</a></li>
+<li><a class="reference external" href="#pyqt4">pyqt4</a></li>
+<li><a class="reference external" href="#id5">比较</a></li>
+<li><a class="reference external" href="#id6">结论</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>上一个主题</h4>
+            <p class="topless"><a href="disadvantage.html"
+                                  title="上一章">python的缺点</a></p>
+            <h4>下一个主题</h4>
+            <p class="topless"><a href="tips.html"
+                                  title="下一章">常用的方法</a></p>
+            <h3>本页</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/gui.txt"
+                     rel="nofollow">显示源代码</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>快速搜索</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="搜索" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              输入相关的模块，术语，类或者函数名称进行搜索
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="tips.html" title="常用的方法"
+             >下一页</a> |</li>
+        <li class="right" >
+          <a href="disadvantage.html" title="python的缺点"
+             >上一页</a> |</li>
+        <li><a href="index.html">python学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; 版权所有 2009, zhutao.
+      使用 <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

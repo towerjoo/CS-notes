@@ -1,0 +1,1049 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
+<meta name="version" content="S5 1.1" />
+<title>About Python Namespaces (and Code Objects)</title>
+<meta name="author" content="Jeff Rush &lt;jeff&#64;taupro.com&gt;" />
+<meta name="copyright" content="2009 Tau Productions Inc." />
+<meta name="date" content="March 27, 2009" />
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+<!-- configuration parameters -->
+<meta name="defaultView" content="slideshow" />
+<meta name="controlVis" content="hidden" />
+<!-- style sheet links -->
+<script src="ui/default/slides.js" type="text/javascript"></script>
+<link rel="stylesheet" href="ui/default/slides.css"
+      type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="ui/default/outline.css"
+      type="text/css" media="screen" id="outlineStyle" />
+<link rel="stylesheet" href="ui/default/print.css"
+      type="text/css" media="print" id="slidePrint" />
+<link rel="stylesheet" href="ui/default/opera.css"
+      type="text/css" media="projection" id="operaFix" />
+
+<style type="text/css">
+#currentSlide {display: none;}
+</style>
+</head>
+<body>
+<div class="layout">
+<div id="controls"></div>
+<div id="currentSlide"></div>
+<div id="header">
+
+</div>
+<div id="footer">
+<h1>About Python Namespaces (and Code Objects)</h1>
+<h2>Chicago • PyCon 2009</h2>
+</div>
+</div>
+<div class="presentation">
+<div class="slide" id="slide0">
+<h1 class="title">About Python Namespaces (and Code Objects)</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>Jeff Rush &lt;<a class="reference external" href="mailto:jeff&#64;taupro.com">jeff&#64;taupro.com</a>&gt;</td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>2009 Tau Productions Inc.</td></tr>
+<tr class="field"><th class="docinfo-name">License:</th><td class="field-body">Creative Commons Attribution-ShareAlike 3.0</td>
+</tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>March 27, 2009</td></tr>
+</tbody>
+</table>
+<!-- Definitions of interpreted text roles (classes) for S5/HTML data. -->
+<!-- This data file has been placed in the public domain. -->
+<!-- Colours
+======= -->
+<!-- Text Sizes
+========== -->
+<!-- Display in Slides (Presentation Mode) Only
+========================================== -->
+<!-- Display in Outline Mode Only
+============================ -->
+<!-- Display in Print Only
+===================== -->
+<!-- Display in Handout Mode Only
+============================ -->
+<!-- Incremental Display
+=================== -->
+<p>An explanation of some of the underlying concepts of Python, come learn about
+names/values placed in namespaces, modified by code objects and collected into
+modules.  We'll explore namespaces using the Python interactive prompt, with
+graphical display of object trees using Graphviz.  Also explained will be the
+namespace concepts of closures and early binding; how to define new objects
+without subclassing via use of default/curried arguments and closures.</p>
+<div class="handout container">
+<div align="center" class="align-center"><img alt="/home/caster/themes/talk-pycon/pycon-chicago.png" class="align-center" src="/home/caster/themes/talk-pycon/pycon-chicago.png" /></div>
+</div>
+
+</div>
+<div class="slide" id="a-few-facts-about-namespaces">
+<h1>A Few Facts About Namespaces</h1>
+<div class="slide-display container">
+<p><em>&quot;You are in a namespace.  There are names here.&quot;</em></p>
+<ul class="incremental">
+<li><p class="first">Namespaces are mappings, often dicts</p>
+</li>
+<li><p class="first">the foundation of Python; highly optimized</p>
+</li>
+<li><p class="first">many created/destroyed during execution</p>
+</li>
+<li><dl class="first docutils">
+<dt>there are three well-known ones</dt>
+<dd><ul class="first last simple">
+<li><span class="incremental">globals,</span> <span class="incremental">locals,</span> <span class="incremental">(builtins)</span></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">the set of namespaces around when a function</p>
+<ul class="incremental simple">
+<li>is <em>defined</em> is a <strong>lexical context</strong></li>
+<li>is <em>called</em> is a <strong>dynamic context</strong></li>
+</ul>
+</li>
+<li><p class="first">Python uses lexical contexts for closures</p>
+</li>
+</ul>
+</div>
+<div class="handout container">
+<p>Namespaces can be stacked, such that a search for a name traverses them in
+a particular order.  There can be globals() and locals(), which can be
+different or the same namespace.  And there can be other namespaces mixed
+in there as nested scopes.  Name resolution is inner to outer.</p>
+<p>Python 2.2 added statically-nested scoping (lexical scoping).  Prior to
+this the language defined exactly three namespaces for name resolution,
+locals, globals and builtins.</p>
+<p>The addition of nested scopes to Python allows resolution of unbound local
+names in enclosing functions.</p>
+<p>Use of a name within a code block that (a) is not bound there and (b) is
+not declared global, is a reference to the nearest enclosing function (but
+NOT class) region.  Such a name is a free variable.</p>
+<p>A variable can be either a cell variable or a free variable, for a
+particular code object.  A cell variable is referenced by containing
+scopes.  A free variable is referenced via a functions's closure.</p>
+</div>
+</div>
+<div class="slide" id="when-name-binding-occurs">
+<h1>When Name Binding Occurs</h1>
+<div class="slide-display container">
+<ul class="incremental simple">
+<li>Name binding only occurs:<ul class="incremental">
+<li>assignment</li>
+<li>class and function definition</li>
+<li>import statements</li>
+<li>argument declaration</li>
+<li>for statements</li>
+<li>except clauses</li>
+<li>implicitly as a result of closures</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="slide" id="introducing-code-objects">
+<h1>Introducing Code Objects</h1>
+<div class="slide-display container">
+<p>Code Objects: a natural partner</p>
+<ul class="incremental simple">
+<li><span class="incremental">namespaces</span> <span class="incremental">+ code objects</span> <span class="incremental">-&gt; cool stuff</span><ul class="incremental">
+<li>modules</li>
+<li>functions</li>
+<li>classes</li>
+<li>instances</li>
+<li>methods</li>
+<li>generators</li>
+<li>???</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="handout container">
+Code objects are the natural partner of namespaces.  Functions, modules and
+classes are created by combining code objects with namespaces in various
+ways.</div>
+</div>
+<div class="slide" id="code-objects-what-are-they">
+<h1>Code Objects: What are they?</h1>
+<div class="slide-display container">
+<ul class="incremental simple">
+<li>a low-level concept</li>
+<li>a sequence of bytecodes compiled</li>
+<li>from a <strong>fragment</strong> of Python source</li>
+</ul>
+<!--  -->
+<ul class="incremental simple">
+<li>are NOT namespaces</li>
+<li>run INSIDE one or more namespaces</li>
+<li>are NOT function objects, lacking context</li>
+</ul>
+</div>
+<div class="handout container">
+<p>A code object is a sequence of bytecode instructions compiled from a
+fragment of Python source.  Code objects are not namespaces (nor functions)
+but rather they run inside of namespaces.  Code objects are immutable and
+contain no references (directly or indirectly) to mutable objects.  Code
+objects are also not functions because code objects lack context such as
+default argument values (computed at runtime not compile time) and explicit
+reference to the functions's global namespace.</p>
+<p>Attribute               Purpose
+=========               =======</p>
+<p>co_name  (object)       name of the function
+co_argcount (int)       number of positional arguments
+co_nlocals (int)        number of local variables used, including arguments
+co_varnames  (object)   tuple of the names of the local variables, starting with the argument names
+co_cellvars  (object)   tuple of the names of variables referenced by nested functions
+co_freevars  (object)   tuple of free variables
+co_code (object)        string representing the actual bytecode instructions
+co_consts (object)      tuple of literals used by the bytecode instructions, docstring first
+co_names  (object)      tuple of the names used by the bytecode instructions
+co_filename  (object)   name of the file from which the code was compiled
+co_firstlineno  (int)   first line number of the function
+co_lnotab   (object)    a string encoding the mapping from bytecode offsets to line numbers
+co_stacksize (int)      the required stacksize, including local variables
+co_flags (int)          an encoding of various flags for the interpreter</p>
+</div>
+</div>
+<div class="slide" id="code-objects-where-they-come-from">
+<h1>Code Objects: Where They Come From</h1>
+<div class="slide-display container">
+<p>The Python elements that can compile code are:</p>
+<ul class="incremental simple">
+<li>the import statement</li>
+<li>the compile() function</li>
+<li>the exec statement</li>
+<li>the execfile() function</li>
+<li>the eval() function</li>
+<li>the input() function</li>
+</ul>
+</div>
+</div>
+<div class="slide" id="code-objects-creating-them">
+<h1>Code Objects: Creating Them</h1>
+<div class="slide-display container">
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; sourcestring = &quot;&quot;&quot;
+... x = 5
+... &quot;&quot;&quot;
+&gt;&gt;&gt; co = compile(sourcestring, '&lt;stdin&gt;', 'exec')
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; from dis import dis
+&gt;&gt;&gt; dis(co)
+2           0 LOAD_CONST               0 (5)
+            3 STORE_NAME               0 (x)
+            6 LOAD_CONST               1 (None)
+            9 RETURN_VALUE
+&gt;&gt;&gt; dir(co)
+[...] # some interesting attributes to explore
+</pre>
+</div>
+<div class="handout container">
+We can take a trivial piece of Python source and compile it into a code
+object we can examine and dump the resulting bytecode instructions.  Then
+we can combine it with an empty namespace and examine the results of that
+execution.</div>
+</div>
+<div class="slide" id="code-objects-invoking-them">
+<h1>Code Objects: Invoking Them</h1>
+<div class="slide-display container">
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; ns = {}  # an empty namespace
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; exec co in ns
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; ns.keys()
+['__builtins__', 'x']
+</pre>
+<!--  -->
+<p class="incremental">Actually:</p>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; exec co in ns, ns  # namespaces: global, local
+</pre>
+</div>
+</div>
+<div class="slide" id="code-objects-recognizing-them">
+<h1>Code Objects: Recognizing Them</h1>
+<div class="slide-display container">
+<p class="incremental">A single source file has many code objects!</p>
+<div class="incremental line-block">
+<div class="line">def func():</div>
+<div class="line-block">
+<div class="line">pass        <span class="incremental">&lt;---- code object</span></div>
+</div>
+</div>
+<div class="incremental line-block">
+<div class="line">class alpha:</div>
+<div class="line-block">
+<div class="line">pass        <span class="incremental">&lt;---- code object</span></div>
+</div>
+</div>
+<div class="incremental line-block">
+<div class="line">class alpha:</div>
+<div class="line-block">
+<div class="line">def __init__(self):  <span class="incremental">&lt;---- code object #1</span></div>
+<div class="line-block">
+<div class="line">pass             <span class="incremental">&lt;---- code object #2</span></div>
+</div>
+</div>
+</div>
+<div class="incremental line-block">
+<div class="line">if x &gt; 5:</div>
+<div class="line-block">
+<div class="line">pass        <span class="incremental">&lt;---- NOT a code object</span></div>
+</div>
+</div>
+<div class="incremental line-block">
+<div class="line">for x in range(5):</div>
+<div class="line-block">
+<div class="line">print x     <span class="incremental">&lt;---- NOT a code object</span></div>
+</div>
+</div>
+</div>
+</div>
+<div class="slide" id="code-objects-a-network-of-objects">
+<h1>Code Objects: A Network of Objects</h1>
+<div class="slide-display container">
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/simplemodule-src.png" class="incremental" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/simplemodule-src.png" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/simplemodule-diagram.png" class="incremental" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/simplemodule-diagram.png" />
+</div>
+<div class="handout container">
+<p>Code objects come from the import stage, and there are many code objects at
+any one time in memory, not just one big one for your overall program.</p>
+<p>The program (dump_namespace.py) to create this SVG diagram from any Python
+source is available with these slides.  It uses the Graphviz opensource
+tool for the plotting.</p>
+</div>
+</div>
+<div class="slide" id="code-objects-a-network-of-objects-string-py">
+<h1>Code Objects: A Network of Objects (string.py)</h1>
+<div class="slide-display container">
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/sample-verybusy.png" class="incremental" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/sample-verybusy.png" />
+</div>
+<div class="handout container">
+(CONSIDER REWORKING, PERHAPS PANNING OVER THE LARGE DIAGRAM)</div>
+</div>
+<div class="slide" id="steps-to-instantiating-a-module">
+<h1>Steps to Instantiating a Module</h1>
+<div class="slide-display container">
+<div class="animation container">
+<div class="handout incremental slide-display container">
+Let's walk through the steps of creating a module object from
+source code, at import time.  We won't worry about how the module
+is located, using <em>sys.path</em> but assume we have already found the
+.py file.</div>
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/src-walkon.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/src-walkon.gif" />
+<div class="handout incremental slide-display container">
+Here we have the text of a simple module defining a float variable
+and two functions, the first with a default argument of 5.  When
+imported for the first time, the Python interpreter compiles it.</div>
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/src-walkleft.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/src-walkleft.gif" />
+<div class="handout incremental slide-display container">
+Running the module through the Python bytecode compiler gives us a
+tree of code objects, where the root code object represents the
+steps to initialize the module object and the children are the two
+functions 'alpha' and 'beta'.  Zooming into that code object tree
+we can see the raw materials used to construct the namespace of
+the new module.</div>
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/innercode-zoom.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/innercode-zoom.gif" />
+<div class="handout incremental slide-display container">
+<p>We can see in <em>co_names</em> the names the module will bind, as well
+as the values of the right side bound to entries in <em>co_consts</em>.
+Let's peek at the generated bytecode for that module
+initialization to see how they get put together.</p>
+<p>By the way, this tree of objects is what is serialized, using the
+<em>marshal</em> module onto disk in a .pyc file named after the module.</p>
+<p>The module's code binds the variable 'z' to a float value and
+instantiates two function objects, binding them to the names
+'alpha' and 'beta' respectively.</p>
+</div>
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/execprep.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/execprep.gif" />
+<div class="handout incremental slide-display container">
+<p>Now we execute the root code object node within the empty
+namespace of a new module object, which is essentially just a
+dictionary.  That code initializes the module object, similar to
+an __init__ method.</p>
+<p>We see there are two namespaces, globals and locals, that can be
+operated upon by the 'exec' operation.  For modules they both
+point to the empty module object.</p>
+<p>** &gt;&gt;&gt; exec co in sys.modules['__main__'], sys.modules['__main__']
+** DRAW CONNECTING ARROWS TO EXEC COMPONENTS **</p>
+</div>
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/outercode-zoom.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/outercode-zoom.gif" />
+<div class="handout incremental slide-display container">
+<p>Peeking into the formerly empty namespace of the new module, we
+can see that things have been wired up ready for use.</p>
+<p>The name 'z' is pointing to the float value and there are two
+function objects bound to the names 'alpha' and 'beta'.  These
+function objects represent the additional metadata extracted from
+the 'def' statement.  Looking under the '.func_defaults' member of
+function alpha, we can see a tuple of default argument values.</p>
+<p>One other thing to notice is the quiet addition of a binding to
+the special __builtins__ module, which is the third namespace, in
+addition to globals and locals.</p>
+<p>** CONSIDER ADDING A LINK BACK FROM THE FUNCTION OBJECT TO THE NAMESPACE</p>
+</div>
+</div>
+</div>
+<div class="handout container">
+<p>** REMOVE CAPTION AND CLEANUP NONE HANGING OFF AND LABELING OF MODULE **</p>
+<pre class="literal-block">
+  &gt;&gt;&gt; co = compile(s, '&lt;stdin&gt;', 'exec')
+  &gt;&gt;&gt; from dis import dis
+  &gt;&gt;&gt; dis(co)
+    2           0 LOAD_CONST               0 (2.3)
+                3 STORE_NAME               0 (z)
+
+    4           6 LOAD_CONST               1 (5)
+                9 LOAD_CONST               2 (&lt;code object alpha&gt;)
+               12 MAKE_FUNCTION            1
+               15 STORE_NAME               1 (alpha)
+
+    7          18 LOAD_CONST               3 (&lt;code object beta&gt;)
+               21 MAKE_FUNCTION            0
+               24 STORE_NAME               2 (beta)
+
+               27 LOAD_CONST               4 (None)
+               30 RETURN_VALUE
+
+As a sidenote, there are only four ways for a binding to get into a
+module's namespace:
+
+  + assignment operator
+  + import
+  + def statement
+  + class statement
+</pre>
+<!--  -->
+<blockquote>
+remove EXEC box, place a red X over the root code object and
+add a sys.path namespace entry that points to the non-empty namespace.
+sys.modules['__main__'] = Module(base(filename))
+change the caption below that namespace to non-empty.</blockquote>
+<p>After execution of the root code object completes, that code object is
+discarded but the two leaf code objects remain in use, as they are now
+bound to the names <strong>alpha</strong> and <strong>beta</strong> as we can see in the next
+diagram.</p>
+<p>The module object with its initialized namespace is then added to the
+interpreter's list of modules <em>sys.modules</em>.  By the way, from this global
+list which sits at the top of all namespaces, you can get a highlevel view
+of existing namespaces and traverse downward through nested namespaces.</p>
+</div>
+</div>
+<div class="slide" id="module-instantiation-a-review">
+<h1>Module Instantiation: A Review</h1>
+<div class="slide-display container">
+<p>Modules are (at initial import time)</p>
+<ul class="incremental simple">
+<li>parsed/compiled into an object tree</li>
+<li>(serialized into a .pyc file)</li>
+<li>whose root node is executed, producing a</li>
+<li>namespace pointing into</li>
+<li>a tree of objects</li>
+</ul>
+<!--  -->
+<ul class="incremental simple">
+<li>that root node after execution is discarded and</li>
+<li>the namespace entered into <em>sys.modules</em></li>
+</ul>
+</div>
+</div>
+<div class="slide" id="dissecting-module-creation">
+<h1>Dissecting Module Creation</h1>
+<div class="slide-display container">
+<div class="animation container">
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-src.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-src.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-dis.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-dis.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-pre.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-pre.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-post.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modempty-post.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-src.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-src.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-dis.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-dis.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-pre.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-pre.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-post.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/modassign-post.gif" />
+</div>
+</div>
+</div>
+<div class="slide" id="dissecting-function-creation">
+<h1>Dissecting Function Creation</h1>
+<div class="slide-display container">
+<div class="animation container">
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-src.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-src.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-dis.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-dis.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-pre.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-pre.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-post.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/funcdef-post.gif" />
+</div>
+</div>
+</div>
+<div class="slide" id="dissecting-class-method-creation">
+<h1>Dissecting Class/Method Creation</h1>
+<div class="slide-display container">
+<div class="animation container">
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-src.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-src.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-dis.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-dis.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-pre.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-pre.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-post.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmin-post.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-src.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-src.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-dis.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-dis.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-pre.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-pre.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-post.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/classmeth-post.gif" />
+</div>
+</div>
+</div>
+<div class="slide" id="function-method-invocation-a-review">
+<h1>Function/Method Invocation: A Review</h1>
+<div class="slide-display container">
+<p>Functions/Methods are</p>
+<ul class="incremental simple">
+<li>NOT code objects; they HAVE a code object</li>
+<li><em>locals</em> namespace does not exist until call</li>
+<li>and is constructed from passed/default arguments</li>
+</ul>
+<!--  -->
+<ul class="incremental simple">
+<li>after call the locals namespace is discarded</li>
+<li>(except for generators)</li>
+</ul>
+</div>
+</div>
+<div class="slide" id="namespaces-scope-nesting-and-closures">
+<h1>Namespaces: Scope Nesting and Closures</h1>
+<div class="slide-display container">
+<p>Closures</p>
+<ul class="incremental simple">
+<li>added to Python 2.2 as nested scopes</li>
+<li>a function that retains refs to vars in its <strong>lexical context</strong></li>
+<li>a kind of macro mechanism for generating customized functions</li>
+<li>a way of providing plug-in points in an algorithm</li>
+</ul>
+<ul class="handout simple">
+<li>sometimes a better alternative to object inheritance</li>
+</ul>
+<p class="handout">A closure typically comes about when one function is declared entirely
+within the body of another, and the inner function refers to local
+variables of the outer function. At runtime, when the outer function
+executes, a closure is formed. It consists of the inner function's code
+and references to any variables in the outer function's scope that the
+closure needs.</p>
+<p class="handout">In programming languages, a term is 'open' if it has free variables
+(i.e. those that are not bound to a value) or 'closed' if it has no free
+variables. Thus, the process of binding values to variables is something
+that makes a term closed, or 'closure'. It's actually got nothing to do
+with functions, whether anonymous or otherwise; it's simply about
+binding variables.</p>
+<p class="handout">Python is considered by most to support closures ever since we started
+supporting access to an outer function's locals from within a nested
+function.</p>
+</div>
+</div>
+<div class="slide" id="a-simple-closure-example">
+<h1>A Simple Closure Example</h1>
+<div class="slide-display container">
+<div class="animation container">
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-src.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-src.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-ns1.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-ns1.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-ns2.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-ns2.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-tunnel.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-tunnel.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-define.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-define.gif" />
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-use.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/closure-use.gif" />
+</div>
+</div>
+<div class="handout container">
+<pre class="literal-block">
+def salary_above(amount): # parameterizing function
+    def wages_test(person):
+        return person.salary &gt; amount
+    return wages_test
+
+is_paygrade1 = salary_above(20000) # closure #1
+is_paygrade2 = salary_above(40000) # closure #2
+
+if is_paygrade1(john): ...
+</pre>
+</div>
+</div>
+<div class="slide" id="early-binding-and-namespaces">
+<h1>Early Binding and Namespaces</h1>
+<div class="slide-display container">
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; names = []
+&gt;&gt;&gt; rollcall = names.append # early binding
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; rollcall
+&lt;built-in method append of list object at 0xb7bd2d8c&gt;
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; rollcall('John')
+&gt;&gt;&gt; rollcall('Mary')
+&gt;&gt;&gt; names
+['John', 'Mary']
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; del names
+&gt;&gt;&gt; rollcall('James')
+</pre>
+</div>
+</div>
+<div class="slide" id="early-binding-and-namespaces-2">
+<h1>Early Binding and Namespaces (2)</h1>
+<div class="slide-display container">
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; isurl = re.compile('([a-zA-Z0-9+.-]+)://').match
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; if isurl(&quot;http://www.python&quot;): ...
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; is_allowed = {
+...     'HTTP_AUTHORIZATION': 1,
+...     'HTTP_CGI_AUTHORIZATION': 1,
+...     }.has_key
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; is_allowed
+&lt;built-in method has_key of dict object at 0xb7c404f4&gt;
+</pre>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; if is_allowed('HTTP_AUTHORIZATION'): ...
+</pre>
+</div>
+</div>
+<div class="slide" id="early-binding-and-namespaces-3">
+<h1>Early Binding and Namespaces (3)</h1>
+<div class="slide-display container">
+<!--  -->
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; ez = {}
+&gt;&gt;&gt;  exec urllib2.urlopen('http://peak.telecommunity.com/dist/ez_setup.py'
+...                        ).read() in ez
+</pre>
+</div>
+</div>
+<div class="slide" id="delegation-via-early-binding">
+<h1>Delegation via Early Binding</h1>
+<div class="slide-display container">
+<pre class="incremental literal-block">
+class Alpha:
+    def __init__(self):
+        self.storage = ...
+    def load(self, oid): # passthrus
+        return self.storage.load(oid)
+    def history(self):
+        return self.storage.history()
+</pre>
+<pre class="incremental literal-block">
+class Alpha: # from ZEO
+    def __init__(self):
+        self.storage = ...
+        self.load = self.storage.load
+        self.history = self.storage.history
+</pre>
+</div>
+</div>
+<div class="slide" id="delegation-via-namespace-introspection">
+<h1>Delegation via Namespace Introspection</h1>
+<div class="slide-display container">
+<pre class="incremental literal-block">
+import sys
+
+def main():
+    print &quot;default cmd&quot;
+
+def debug():
+    print &quot;debug cmd&quot;
+
+def profile():
+    print &quot;profile cmd&quot;
+
+if __name__ == &quot;__main__&quot;:
+    if len(sys.argv) &gt; 1:
+        globals()[ sys.argv[1] ]()
+    else:
+        main()
+</pre>
+</div>
+</div>
+<div class="slide" id="curious-case-of-methods-and-functions">
+<h1>Curious Case of Methods and Functions</h1>
+<div class="slide-display container">
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; class Beta:
+...     def meth(self):
+...         pass
+...
+&gt;&gt;&gt; Beta.meth is Beta.meth
+False
+</pre>
+</div>
+</div>
+<div class="slide" id="curious-case-of-methods-and-functions-cont-d">
+<h1>Curious Case of Methods and Functions (cont'd)</h1>
+<div class="slide-display container">
+<div class="animation container">
+<img alt="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/curiousmeth.gif" class="incremental slide-display" src="/home/jeff/notes/presentations/TO-CREATE/pycon2009/talk-Namespaces/graphics/curiousmeth.gif" />
+</div>
+</div>
+</div>
+<div class="slide" id="global-statement-is-not-declaratory">
+<h1>Global Statement Is Not Declaratory</h1>
+<div class="slide-display container">
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; def abc():
+...     global xyz
+...     def xyz(a):
+...         print a
+...     return None
+&gt;&gt;&gt; xyz
+</pre>
+<div class="incremental line-block">
+<div class="line">Traceback (most recent call last):</div>
+<div class="line-block">
+<div class="line">File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</div>
+</div>
+<div class="line">NameError: name 'xyz' is not defined</div>
+</div>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; abc()
+&gt;&gt;&gt; xyz
+&lt;function xyz at 0xb7c7e17c&gt;
+</pre>
+</div>
+<div class="handout container">
+A &quot;global&quot; modifier is not required to read a global variable, only if you
+need to modify one.  This is a safety feature to prevent accidental
+modification of global variables.</div>
+</div>
+<div class="slide" id="practical-use-of-global-statement">
+<h1>Practical Use of Global Statement</h1>
+<div class="slide-display container">
+<pre class="incremental literal-block">
+def StringIO(*args, **kw):
+    &quot;&quot;&quot;Thunk to load the real StringIO on demand&quot;&quot;&quot;
+    global StringIO
+    try:
+        from cStringIO import StringIO
+    except ImportError:
+        from StringIO import StringIO
+    return StringIO(*args,**kw)
+# StringIO points to the thunk
+</pre>
+<pre class="incremental literal-block">
+x = StringIO(&quot;This is some data&quot;)
+# Now StringIO points to the actual function
+</pre>
+</div>
+</div>
+<div class="slide" id="namespaces-and-the-zen-of-python">
+<h1>Namespaces and the Zen of Python</h1>
+<div class="slide-display container">
+<ul class="incremental simple">
+<li>PEP 227 -- Statically Nested Scopes</li>
+<li>Section: Data Model, Subsection: Code objects in Python Ref Manual</li>
+</ul>
+<blockquote class="incremental">
+<pre class="doctest-block">
+&gt;&gt;&gt; import this
+The Zen of Python, by Tim Peters
+...
+Namespaces are one honking great idea -- let's do more of those!
+</pre>
+</blockquote>
+<pre class="incremental doctest-block">
+&gt;&gt;&gt; globals() is locals()
+True?
+</pre>
+<p class="huge"><span class="incremental">Questions?</span></p>
+</div>
+<!-- XXLocal Variables:
+mode: rst
+mode: outline-minor
+End: -->
+</div>
+</div>
+</body>
+</html>

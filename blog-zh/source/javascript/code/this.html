@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            function doSomething()
+            {
+                alert(this.name);
+            }
+
+            var obj = {"name": "obj1"};
+            obj.do = doSomething;
+            obj.do();
+        </script>
+    </head>
+</html>

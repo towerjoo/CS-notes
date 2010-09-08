@@ -1,0 +1,9 @@
+restructuredText => http://docutils.sourceforge.net/rst.html
+Web.py => http://webpy.org/
+Python => http://www.python.org
+CPyUG => http://groups-beta.google.com/group/python-cn
+Django => http://www.djangoproject.com
+openerp => http://www.openerp.com/
+Zope => http://www.zope.org/
+NumPy => http://numpy.scipy.org/
+NLTK => http://www.nltk.org/

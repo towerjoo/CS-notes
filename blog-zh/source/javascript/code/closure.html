@@ -1,0 +1,192 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            var flag = false;   //调试开关
+            // env 既是所谓的环境
+            // 而inner就是所谓的表达式, name即是所谓的自由变量
+            function env()  //整个env可以看作是一个closure
+            {
+                var name = "zhutao";
+
+                function inner()
+                {
+                    return name + " is a student.";
+                }
+                return inner;   //返回的是一个内部函数
+            }//closure结束
+
+            flag = false;
+
+            if (flag)
+            {
+                // 此处是最神奇的地方, 代码执行在此处, inner函数其实已经出了env的body,
+                // 而仍然能够被引用, 这就是所谓形成了一个 closure
+                var inner_func_ref = env(); // 这时候inner_func_ref引用的就是inner()函数对象
+                alert(inner_func_ref());   // zhutao is a student.
+            }
+
+            //一些应用
+
+            flag = false;
+            function OuterFun()
+            {
+                var num = 100;
+                var printNum = function(){alert(num);}  //此处引用的num是引用,而不是值,所以后面改变num,此处的num同样生效
+                num ++;
+                return printNum;
+            }
+            var myfunc = OuterFun();
+            if (flag)
+            {
+                myfunc();   //输出的是101,而不是100
+            }
+
+            //另一个例子,下面的例子,可以看到匿名函数(内部函数)先于外部函数变量的声明,但是仍然能够访问外部函数的变量
+            // 也就是说内部函数与外部函数的变量位于同一个closure, 所以可以访问
+
+            function SameClosure()
+            {
+                var iCanAccess = function(){alert(name);};
+                var name = "zhutao";
+                return iCanAccess;
+            }
+            if (flag)
+            {
+                var testSameClosure = SameClosure();
+                testSameClosure();// zhutao
+            }
+
+            // 另一个应用,关于module pattern, 这样可以实际所谓的 private, public等方法和变量
+            var module = (function Module(){
+                var privateVar = "zhutao is private";   // private
+                return {
+                    publicGetPrivateVar : function(){
+                    return privateVar;
+                    },  // public method, 可以取所谓的private变量
+                    publicVar : "I'm a public variable" // public variable
+                };
+            })();
+
+            if (flag)
+            {
+                alert(module.publicGetPrivateVar());    // zhutao is private
+                alert(module.publicVar);                // I'm a public variable
+                alert(module.privateVar);               // undefined
+            }
+
+            // 关于context的例子
+
+            flag = true;
+
+            var tmpobj = {
+                name : "zhutao",
+                func : function(){
+                    return "call by func " + this.name;
+                }
+            };
+            if (flag)
+            {
+                // 代码执行在此处时context还是global
+                alert(tmpobj.name);
+                alert(tmpobj.func());   //进入func的context
+                // 回到global的context
+            }
+
+
+
+            // 关于效率的例子
+            flag = false;
+            // 这样,每次调用Outer时会产生匿名函数的开销
+            function Outer(obj)
+            {
+                obj.fun = function(){
+                    alert("I am " + this.name);
+                    };
+            }
+
+            if (flag)
+            {
+                var obj = { name : "zhutao"};
+                Outer(obj);
+                obj.fun();
+            }
+
+            // 更好的处理方式
+
+            function Outer_better(obj)
+            {
+                obj.fun = showme;   // 这样调用的只是函数的引用
+            }
+
+            function showme()
+            {
+                alert("I am " + this.name);
+            }
+
+            if (flag)
+            {
+                var obj2 = { name : "zhutao"};
+                Outer_better(obj2);
+                obj2.fun();
+            }
+
+            //模块化
+            flag = false;
+
+            var helper = function(){
+                var name = "zhutao"
+                function showme(){
+                    alert("This is " + name);
+                };
+
+                function changeName(newname){
+                    name = newname;
+                    return this;
+                };
+                return { "showme" : showme, "changeme" : changeName}; // 这种做法相当于封装了很多方法的类.
+            }();
+            
+            if (flag)
+            {
+                helper.showme();    // this is zhutao
+                helper.changeme("Bill");
+                helper.showme();    // this is Bill
+                helper.changeme("Jay").showme();    // this is Jay,  也可以类似于jQuery的call chain
+            }
+
+
+            // 著名的循环问题 
+            flag = false;
+
+            function addLink(num)
+            {
+                for(var i=0; i<num; i++)
+                {
+                    var link = document.createElement('a');
+                    link.innerHTML = "Link " + i;
+                    link.onclick = function(){
+                        alert(i);
+                    };
+                    document.body.appendChild(link);
+                }
+            }
+
+            function addLink2(num)
+            {
+                for(var i=0; i<num; i++)
+                {
+                    var link = document.createElement('a');
+                    link.innerHTML = "Link" + i;
+                    link.onclick = function(j){ //使用closure
+                        return function(){
+                            alert(j);
+                        };
+                    }(i);
+                    document.body.appendChild(link);
+                }
+            }
+        </script>
+    </head>
+    <body >
+    </body>
+</html>

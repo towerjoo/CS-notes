@@ -1,0 +1,7 @@
+关于js的写作计划:
+
+1)prototype完成
+2)closure完成
+3)scope 
+4) this
+5) OO

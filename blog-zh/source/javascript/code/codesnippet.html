@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            function foo(a, b, c){ return a*b*c; }
+            var flag = false;
+            if (flag)
+            {
+                //任意函数具有的几个方法和属性
+                alert(foo.length);
+                alert(typeof foo.constructor);
+                alert(typeof foo.apply);
+                alert(typeof foo.call);
+                alert(typeof foo.prototype);
+            }
+
+            // protoype
+            
+            function Person(name, gender)
+            {
+                this.name = name;
+                this.gender = gender;
+                this.whoAreYou = function(){//这个也是所谓的closure, 内部函数可以访问外部函数的变量
+                    var res = "I'm " + this.name + " and I'm a " + this.gender +".";
+                    return res;
+                };
+            }
+            // 那么在由Person创建的对象便具有了下面的几个属性
+            Person.prototype.age = 24;
+            Person.prototype.getAge = function(){
+                return this.age;
+            };
+            flag = false;
+            var fun = new Person("Tower", "male");
+            if (flag)
+            {
+                var fun = new Person("Tower", "male");
+                alert(fun.name);
+                alert(fun.gender);
+                alert(fun.whoAreYou());
+                alert(fun.getAge());
+            }
+
+            Person.prototype.salary = 10000;
+            Person.prototype.getSalary = function(){
+                return this.name + " can earn about " + this.salary + "RMB each month." ;
+            };
+
+            // 下面就是最神奇的地方, 我们改变了Person的prototype,而这个改变是在创建fun之后
+            // 而这个改变使得fun也具有了相同的属性和方法
+            // 继承的意味即此
+            if (flag)
+            {
+                alert(fun.getSalary());
+                alert(fun.constructor.prototype.age);//而这个相当于你直接调用 Person.prototype.age
+                alert(Person.prototype.age);
+            }
+
+            flag = false;
+            // 函数内部声明的方法是静态的,无法传递的
+            Person.school = "ISCAS";
+            Person.whoAreYou = function(){
+                return "zhutao";
+            };//动态更改声明期的方法,并不会影响由其创建的对象的方法
+            if (flag)
+            {
+                alert(Person.school);
+                alert(fun.school);//输出的是 "undefined"
+                alert(Person.whoAreYou()); //输出 zhutao
+                alert(fun.whoAreYou()); // I'm Tower and I'm a male.
+            }
+
+            Person.prototype.getSalary = function(){
+                return "I can earn 1000000 USD";
+            };
+            if (flag)
+            {
+                alert(fun.getSalary());//已经继承了改变
+            }
+
+            flag = true;
+
+            // 多重prototype链的例子
+            function Employee(name)
+            {
+                this.name = "";
+                this.dept = "general";
+                this.gender = "unknown";
+            }
+
+            function WorkerBee()
+            {
+                this.projects = [];
+                this.hasCar = false;
+            }
+            WorkerBee.prototype = new Employee; // 第一层prototype链
+
+            function Engineer()
+            {
+                this.dept = "engineer"; //覆盖了 "父对象" 
+                this.language = "javascript";
+            }
+            Engineer.prototype = new WorkerBee; // 第二层prototype链
+
+            var jay = new Engineer("Jay");
+            if (flag)
+            {
+                alert(jay.dept);    //engineer, 找到的是自己的属性
+                alert(jay.hasCar);  // false, 搜索到的是自己上一层的属性
+                alert(jay.gender);  // unknown, 搜索到的是自己上二层的属性
+            }
+
+
+        </script>
+    </head>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>abstract factory模式 &mdash; programming v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="author" title="关于这些文档" href="../about.html" />
+    <link rel="top" title="programming v0.1 documentation" href="../index.html" />
+    <link rel="up" title="设计模式学习笔记" href="index.html" />
+    <link rel="next" title="singleton模式" href="singleton.html" />
+    <link rel="prev" title="factory method模式" href="factory.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="singleton.html" title="singleton模式"
+             accesskey="N">下一页</a> |</li>
+        <li class="right" >
+          <a href="factory.html" title="factory method模式"
+             accesskey="P">上一页</a> |</li>
+        <li><a href="../index.html">programming v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">设计模式学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="abstract-factory">
+<span id="id1"></span><h1>abstract factory模式<a class="headerlink" href="#abstract-factory" title="永久链接至标题">¶</a></h1>
+<div class="section" id="index-0">
+<span id="id2"></span><h2>abstract factory模式定义<a class="headerlink" href="#index-0" title="永久链接至标题">¶</a></h2>
+<p><strong>Abstract Factory</strong> provide an interface for creating families of related or dependent
+objects without specifying their concrete classes.</p>
+<p><strong>抽象工厂</strong> 提供了用来创建 <strong>一族</strong> 相关或者依赖的对象而无需指明它们的具体类的接口。</p>
+</div>
+<div class="section" id="id3">
+<h2>问题描述<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>在 <a class="reference external" href="factory.html#factory-method"><em>factory method模式</em></a> 的例子中， 增加了如下的需求：</p>
+<ul class="simple">
+<li>保证不同的地址的分厂生产的产品质量有保证，使用特定的原料</li>
+<li>不同的地址可能原料不尽相同，但是需要指定</li>
+</ul>
+<p><strong>抽象工厂</strong> 的思路如下：</p>
+<img alt="../_images/abstract_class.png" src="../_images/abstract_class.png" />
+<p>具体使用 <strong>抽象工厂</strong> 解决的类图如下：</p>
+<img alt="../_images/abstract_factory_class.png" src="../_images/abstract_factory_class.png" />
+</div>
+<div class="section" id="id4">
+<h2>具体代码<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>下载请点击 <a href="../_downloads/abstract_factory.cpp"><strong class="xref">这里</strong></a></p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><pre>1
+2
+3
+4</pre></td><td class="code"><div class="highlight"><pre><span class="cp">#include&lt;iostream&gt;</span>
+<span class="cp">#include&lt;string&gt;</span>
+<span class="cp">#include&lt;vector&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>输出结果为:</p>
+</div>
+<div class="section" id="id5">
+<h2>面对新的需要<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+<p>需要增加新地点时，如california，可以按照如下进行：</p>
+<ul class="simple">
+<li>继承 <em>Pizza</em> 类生成特定于california的Pizza类</li>
+<li>继承 <em>PizzaStore</em> 类生成特定于california的工厂类</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>更多注意<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<p>需要注意的是：</p>
+<ul class="simple">
+<li><em>Abstract Factory</em> 是基于类 <strong>组合</strong> 的（注意与 <a class="reference external" href="factory.html#factory-method"><em>factory method模式</em></a> 的区别）</li>
+<li><em>Abstract Factory</em> 模式实例化一类 <strong>同族</strong> 的相关或者依赖对象而无需依赖具体的类</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h2>参考更多<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Abstract_factory_pattern">Abstract_Factory_Pattern</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">內容目录</a></h3>
+            <ul>
+<li><a class="reference external" href="">abstract factory模式</a><ul>
+<li><a class="reference external" href="#index-0">abstract factory模式定义</a></li>
+<li><a class="reference external" href="#id3">问题描述</a></li>
+<li><a class="reference external" href="#id4">具体代码</a></li>
+<li><a class="reference external" href="#id5">面对新的需要</a></li>
+<li><a class="reference external" href="#id6">更多注意</a></li>
+<li><a class="reference external" href="#id7">参考更多</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>上一个主题</h4>
+            <p class="topless"><a href="factory.html"
+                                  title="上一章">factory method模式</a></p>
+            <h4>下一个主题</h4>
+            <p class="topless"><a href="singleton.html"
+                                  title="下一章">singleton模式</a></p>
+            <h3>本页</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/designpattern/abstract_factory.txt"
+                     rel="nofollow">显示源代码</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>快速搜索</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="搜索" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              输入相关的模块，术语，类或者函数名称进行搜索
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="singleton.html" title="singleton模式"
+             >下一页</a> |</li>
+        <li class="right" >
+          <a href="factory.html" title="factory method模式"
+             >上一页</a> |</li>
+        <li><a href="../index.html">programming v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >设计模式学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; 版权所有 2009, zhutao.iscas@gmail.com.
+      使用 <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

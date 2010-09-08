@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>设计模式总结 &mdash; programming v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="author" title="关于这些文档" href="../about.html" />
+    <link rel="top" title="programming v0.1 documentation" href="../index.html" />
+    <link rel="up" title="设计模式学习笔记" href="index.html" />
+    <link rel="prev" title="proxy模式" href="proxy.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="总目录"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="proxy.html" title="proxy模式"
+             accesskey="P">上一页</a> |</li>
+        <li><a href="../index.html">programming v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">设计模式学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>设计模式总结<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<div class="section" id="index-13">
+<span id="id2"></span><h2>一些定义<a class="headerlink" href="#index-13" title="永久链接至标题">¶</a></h2>
+<p>A <strong>Pattern</strong> is a <em>solution</em> to a <em>problem</em> in a <em>context</em>.</p>
+</div>
+<div class="section" id="id3">
+<h2>设计模式的分类<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>主要分为三类: <strong>Creational</strong>, <strong>Behavioral</strong>, <strong>Structural</strong></p>
+<p><strong>Creational</strong> 的模式是指:包含有对象的实例化又及提供一种方式来解耦合客户和所需实例化的对象.
+包括有:</p>
+<ul class="simple">
+<li><a class="reference external" href="singleton.html#id1"><em>Singleton</em></a></li>
+<li><a class="reference external" href="abstract_factory.html#abstract-factory"><em>Abstract Factory</em></a></li>
+<li><a class="reference external" href="factory.html#factory"><em>Factory</em></a></li>
+<li>Builder</li>
+<li>Prototype</li>
+</ul>
+<p><strong>Behavioral</strong> 的模式是指: 主要关心类和对象之间的交互及如何分配责任.
+包括有:</p>
+<ul class="simple">
+<li><a class="reference external" href="template.html#id1"><em>Template Method</em></a></li>
+<li><a class="reference external" href="command.html#id1"><em>Command</em></a></li>
+<li><a class="reference external" href="iterator.html#id1"><em>Iterator</em></a></li>
+<li><a class="reference external" href="observer.html#id1"><em>Observer</em></a></li>
+<li><a class="reference external" href="state.html#id1"><em>State</em></a></li>
+<li><a class="reference external" href="strategy.html#id1"><em>Strategy</em></a></li>
+<li>Mediator</li>
+<li>Vistor</li>
+<li>Memento</li>
+<li>Interpreter</li>
+<li>Chain of Responsibility</li>
+</ul>
+<p><strong>Structural</strong> 模式是指:使得组合类或者对象为了个更大的结构.
+包括有:</p>
+<ul class="simple">
+<li><a class="reference external" href="decorator.html#id1"><em>Decorator</em></a></li>
+<li><a class="reference external" href="composite.html#id1"><em>Composite</em></a></li>
+<li><a class="reference external" href="adapter.html#id1"><em>Adapter</em></a></li>
+<li><a class="reference external" href="facade.html#id1"><em>Facade</em></a></li>
+<li><a class="reference external" href="proxy.html#id1"><em>Proxy</em></a></li>
+<li>Flyweight</li>
+<li>Bridge</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>一些设计上的原则<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>要尽量使得设计简单,尽量不使用设计模式就不使用,除非真正需要.</p>
+<ul class="simple">
+<li>Keep It Simple and Stupid(KISS)</li>
+<li>Design Patterns are not a magic bullet; in fact they&#8217;re not even a bullet</li>
+<li>Use a design pattern when you really need it</li>
+<li>Refactoring time is Patterns time!</li>
+<li>Take out what you don&#8217;t realy need. Don&#8217;t be afraid to remove a Design Pattern from your design</li>
+<li>If you don&#8217;t need it now, don&#8217;t do it now</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>设计模式简单小结<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="decorator.html#id1"><em>Decorator</em></a> : Wraps an object to provide new behavior</li>
+<li><a class="reference external" href="state.html#id1"><em>State</em></a> : Encapsulates state-based behaviors and uses delegation to decide which one to use</li>
+<li><a class="reference external" href="iterator.html#id1"><em>Iterator</em></a> : Provides a way to traverse a collection of objects without exposing its implementation</li>
+<li><a class="reference external" href="facade.html#id1"><em>Facade</em></a>: Simplifies the interface of a set of classes</li>
+<li><a class="reference external" href="strategy.html#id1"><em>Strategy</em></a> : Encapsulates interchaangable behaviors and uses delegation to decide which one to use</li>
+<li><a class="reference external" href="proxy.html#id1"><em>Proxy</em></a> : Wraps an object to control access to it</li>
+<li><a class="reference external" href="factory.html#factory"><em>Factory</em></a> : Subclasses decide which concrete classes to create</li>
+<li><a class="reference external" href="adapter.html#id1"><em>Adapter</em></a>: Wraps an object and provides a different interface to it</li>
+<li><a class="reference external" href="observer.html#id1"><em>Observer</em></a> : Allows  objects to be notified when state changes</li>
+<li><a class="reference external" href="template.html#id1"><em>Template Method</em></a> : Subclasses decide how to implement steps in an algorithm</li>
+<li><a class="reference external" href="composite.html#id1"><em>Composite</em></a> : Clients treat collections of objects and individual objects uniformly</li>
+<li><a class="reference external" href="singleton.html#id1"><em>Singleton</em></a> : Ensures one and only object is created</li>
+<li><a class="reference external" href="abstract_factory.html#abstract-factory"><em>Abstract Factory</em></a> : Allows a client to create families of objects without specifying their concrete classes</li>
+<li><a class="reference external" href="command.html#id1"><em>Command</em></a> : Encapsulates a request as an object</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>参考更多<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://c2.com/cgi/wiki?WelcomeVisitors">The Porland Patterns Repository</a></li>
+<li><a class="reference external" href="http://hillside.net">The Hillside Group</a></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">內容目录</a></h3>
+            <ul>
+<li><a class="reference external" href="">设计模式总结</a><ul>
+<li><a class="reference external" href="#index-13">一些定义</a></li>
+<li><a class="reference external" href="#id3">设计模式的分类</a></li>
+<li><a class="reference external" href="#id4">一些设计上的原则</a></li>
+<li><a class="reference external" href="#id5">设计模式简单小结</a></li>
+<li><a class="reference external" href="#id6">参考更多</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>上一个主题</h4>
+            <p class="topless"><a href="proxy.html"
+                                  title="上一章">proxy模式</a></p>
+            <h3>本页</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/designpattern/summary.txt"
+                     rel="nofollow">显示源代码</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>快速搜索</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="搜索" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              输入相关的模块，术语，类或者函数名称进行搜索
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>导航</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="总目录"
+             >索引</a></li>
+        <li class="right" >
+          <a href="proxy.html" title="proxy模式"
+             >上一页</a> |</li>
+        <li><a href="../index.html">programming v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >设计模式学习笔记</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; 版权所有 2009, zhutao.iscas@gmail.com.
+      使用 <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>
